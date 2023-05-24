@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.farmacia</groupId>
-	<artifactId>Farmacia</artifactId>
+	<artifactId>Farmacias</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>farmacia</name>
 	<description>Comunicação com APIs de farmácias</description>
