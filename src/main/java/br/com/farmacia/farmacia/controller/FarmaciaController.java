@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping (value="/api")
 public class FarmaciaController {
+
     @GetMapping(value="/retorna-farmacia-string")
     public String farmaciaString(){
         String umaString = new String("Metodo Funcionando");
@@ -20,22 +21,20 @@ public class FarmaciaController {
     }
 
     @GetMapping(value="/lista-farmaceutico-string")
-    public List<String> listaFarmaceuticosString() {
-        List<String> listaFarmaceutico = new ArrayList<>();
+    public List<Farmaceutico> listaFarmaceuticos() {
+        List<Farmaceutico> listaFarmaceutico = new ArrayList<>();
 
         Farmaceutico farmaceutico2 = new Farmaceutico();
         farmaceutico2.setNome("Pedro");
         farmaceutico2.setCpf("123.456.789-10");
         farmaceutico2.setCrf("54321/SP");
 
-        listaFarmaceutico.add("Nome do Farmaceutico: " + farmaceutico2.getNome());
-        listaFarmaceutico.add("CPF do Farmaceutico: " + farmaceutico2.getCpf());
-        listaFarmaceutico.add(farmaceutico2.getCrf());
+        listaFarmaceutico.add(farmaceutico2);
         System.out.println("Listagem de Farmaceuticos concluida");
         return listaFarmaceutico;
     }
-    @GetMapping(value = "/lista-remedio")
 
+    @GetMapping(value = "/lista-remedio")
     public List<Remedio> listaRemedios()   {
         List<Remedio> listaDeRemedio = new ArrayList<>();
         Remedio remedio1 = new Remedio();
