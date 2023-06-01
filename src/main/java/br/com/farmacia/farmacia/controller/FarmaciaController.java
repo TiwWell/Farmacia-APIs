@@ -43,6 +43,7 @@ public class FarmaciaController {
         remedio1.setQuantidadeEstoque(100);
 
         listaDeRemedio.add(remedio1);
+        System.out.println("Remedios Apresentados");
         return listaDeRemedio;
     }
 }
