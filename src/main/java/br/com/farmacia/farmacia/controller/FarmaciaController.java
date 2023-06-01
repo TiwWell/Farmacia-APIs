@@ -1,5 +1,6 @@
 package br.com.farmacia.farmacia.controller;
 
+import br.com.farmacia.farmacia.models.Farmaceutico;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,20 +15,22 @@ public class FarmaciaController {
     public String farmaciaString(){
         String umaString = new String("Metodo Funcionando");
         System.out.println("Entrou no Metodo: Farmacia String");
-        return umaString ;
+        return umaString;
     }
-    @GetMapping(value="/lista-farmacia-string")
-    public List<String> farmaciaListaString() {
-        List<String> listaString = new ArrayList<>();
-        String umaString = new String("Clonazepan");
-        String segundaString = new String("Fluxetina");
-        String terceiraString = new String ("Dipirona");
-        listaString.add(umaString);
-        listaString.add(segundaString);
-        listaString.add(terceiraString);
-        listaString.remove(2);
-        System.out.println("Farmacia Lista String Visualizada");
-        System.out.println(listaString.size());
-        return listaString  ;
+
+    @GetMapping(value="/lista-farmaceutico-string")
+    public List<String> listaFarmaceuticosString() {
+        List<String> listaFarmaceutico = new ArrayList<>();
+
+        Farmaceutico farmaceutico2 = new Farmaceutico();
+        farmaceutico2.setNome("Pedro");
+        farmaceutico2.setCpf("123.456.789-10");
+        farmaceutico2.setCrf("54321/SP");
+
+        listaFarmaceutico.add("Nome do Farmaceutico: " + farmaceutico2.getNome());
+        listaFarmaceutico.add("CPF do Farmaceutico: " + farmaceutico2.getCpf());
+        listaFarmaceutico.add(farmaceutico2.getCrf());
+        System.out.println("Listagem de Farmaceuticos concluida");
+        return listaFarmaceutico;
     }
 }
