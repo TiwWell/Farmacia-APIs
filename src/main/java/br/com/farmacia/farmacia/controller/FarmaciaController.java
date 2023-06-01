@@ -1,6 +1,7 @@
 package br.com.farmacia.farmacia.controller;
 
 import br.com.farmacia.farmacia.models.Farmaceutico;
+import br.com.farmacia.farmacia.models.Remedio;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,5 +33,17 @@ public class FarmaciaController {
         listaFarmaceutico.add(farmaceutico2.getCrf());
         System.out.println("Listagem de Farmaceuticos concluida");
         return listaFarmaceutico;
+    }
+    @GetMapping(value = "/lista-remedio")
+
+    public List<Remedio> listaRemedios()   {
+        List<Remedio> listaDeRemedio = new ArrayList<>();
+        Remedio remedio1 = new Remedio();
+        remedio1.setNome("Clonazepan");
+        remedio1.setPreco(20.00);
+        remedio1.setQuantidadeEstoque(100);
+
+        listaDeRemedio.add(remedio1);
+        return listaDeRemedio;
     }
 }
