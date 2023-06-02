@@ -33,7 +33,7 @@ public class FarmaciaController {
         System.out.println("Listagem de Farmaceuticos concluida");
         return listaFarmaceutico;
     }
-
+//Linha abaixo é uma anotação
     @GetMapping(value = "/lista-remedio")
     public List<Remedio> listaRemedios()   {
         List<Remedio> listaDeRemedio = new ArrayList<>();
