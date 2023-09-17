@@ -1,5 +1,6 @@
 package br.com.farmacia.farmacia.controller;
 
+import br.com.farmacia.farmacia.models.Cliente;
 import br.com.farmacia.farmacia.models.Farmaceutico;
 import br.com.farmacia.farmacia.models.Remedio;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -56,5 +57,16 @@ public class FarmaciaController {
 
         System.out.println("Remedios Apresentados");
         return listaDeRemedio;
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping(value="/lista-cliente-string")
+    public List<Cliente> listaCliente() {
+        List<Cliente> listadeCliente = new ArrayList<>();
+        Cliente cliente1 = new Cliente("João", "Rua Dom Oscar Romero, 97", "1234567-89", "11 91234-5678");
+
+        listadeCliente.add(cliente1);
+        System.out.println("Clientes apresentados");
+        return listadeCliente;
     }
 }
