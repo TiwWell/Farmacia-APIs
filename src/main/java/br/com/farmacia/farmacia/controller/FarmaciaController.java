@@ -60,7 +60,7 @@ public class FarmaciaController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(value="/lista-cliente-string")
+    @GetMapping(value="/lista-cliente")
     public List<Cliente> listaCliente() {
         List<Cliente> listadeCliente = new ArrayList<>();
         Cliente cliente1 = new Cliente("João", "Rua Dom Oscar Romero, 97", "1234567-89", "11 91234-5678");
