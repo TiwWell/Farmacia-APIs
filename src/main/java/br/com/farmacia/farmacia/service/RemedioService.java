@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RemedioService {
@@ -34,4 +35,18 @@ public class RemedioService {
 
         return listaDeRemedio;
     }
+    public String deletarRemedios(Long id) throws Exception {
+        try {
+            Optional<RemediosEntity> remediosEntity = repository.findById(id);
+            if (!remediosEntity.isPresent()){
+                return "Remedio ID does not exist in the database";
+
+            }
+            repository.deleteById(id);
+        } catch (Exception ex){
+            throw new Exception(ex.getCause());
+
+    } return "Deleted with sucessfull!!";
+
+}
 }
