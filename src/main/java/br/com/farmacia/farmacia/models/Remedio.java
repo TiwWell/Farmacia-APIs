@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Remedio {
     String nome;
-    double preco;
+    double valor;
     int quantidade;
     String img;
 
