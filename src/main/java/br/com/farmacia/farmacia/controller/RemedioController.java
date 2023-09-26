@@ -1,6 +1,7 @@
 package br.com.farmacia.farmacia.controller;
 
-import br.com.farmacia.farmacia.models.Remedio;
+import br.com.farmacia.farmacia.models.RemedioDTO;
+import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.service.RemedioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class RemedioController {
     private RemedioService service;
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/lista-remedio")
-    public List<Remedio> listaRemedios() throws Exception {
+    public List<RemedioDTO> listaRemedios() throws Exception {
         return service.getRemedio();
     }
 
@@ -23,4 +24,10 @@ public class RemedioController {
     public String deletarRemedios (@PathVariable Long id) throws Exception{
         return service.deletarRemedios(id);
     }
+
+    @PostMapping(value = "/adicionar-remedio")
+    public RemedioResponse adicionarRemedio(@RequestBody RemedioDTO remedioDTO) throws Exception {
+        return service.adicionarRemedio(remedioDTO);
+    }
 }
+
