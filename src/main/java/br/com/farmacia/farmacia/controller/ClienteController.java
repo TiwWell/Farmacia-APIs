@@ -29,4 +29,15 @@ public class ClienteController {
     public ClienteResponse adicionarClientes(@RequestBody ClienteDTO clienteDTO) throws Exception {
         return service.adicionarClientes(clienteDTO);
     }
+
+    @DeleteMapping(value = "/deletar-cliente/{id}")
+    public String deletarCliente(@PathVariable Long id) throws Exception {
+        return service.deletarCliente(id);
+    }
+
+    @PutMapping(value = "/update-cliente")
+    public ClienteResponse updateCliente(@RequestBody ClienteDTO clienteDTO) throws Exception {
+        return service.updateCliente(clienteDTO);
+
+    }
 }
