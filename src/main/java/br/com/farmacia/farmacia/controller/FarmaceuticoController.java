@@ -1,6 +1,9 @@
 package br.com.farmacia.farmacia.controller;
 
 import br.com.farmacia.farmacia.models.FarmaceuticoDTO;
+import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
+import br.com.farmacia.farmacia.models.RemedioDTO;
+import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.service.FarmaceuticoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +29,9 @@ public class FarmaceuticoController {
 //        return service.deletarFarmaceutico(id);
 //    }
 
-
-
-
+    @PostMapping(value = "/adicionar-farmaceutico")
+    public FarmaceuticoResponse adicionarFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+        return service.adicionarFarmaceutico(farmaceuticoDTO);
+    }
 
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FarmaceuticoDTO {
 
+    int id;
     String nome;
     String cpf_cnpj;
     String crf;
