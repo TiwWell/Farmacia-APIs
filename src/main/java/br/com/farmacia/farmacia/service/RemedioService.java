@@ -23,6 +23,7 @@ public class RemedioService {
             List<RemediosEntity> listaRemediosEntity = repository.findAll();
             for (RemediosEntity remediosEntity : listaRemediosEntity) {
                 RemedioDTO remedio = new RemedioDTO();
+                remedio.setId(remediosEntity.getId());
                 remedio.setNome(remediosEntity.getNome());
                 remedio.setValor(remediosEntity.getValor());
                 remedio.setQuantidade(remediosEntity.getQuantidade());
@@ -76,7 +77,33 @@ public class RemedioService {
 
     }
 
+    public RemedioResponse updateRemedio(RemedioDTO remedioDTO) throws Exception {
+        RemedioResponse remedioResponse = new RemedioResponse();
+        remedioResponse.setRemedio(new ArrayList<>());
+        try {
+            Optional<RemediosEntity> remediosEntity = repository.findById((long) remedioDTO.getId());
+            if (!remediosEntity.isPresent()) {
+                remedioResponse.setMensagem("This remedio does not exists into the database");
+                remedioResponse.setCodRetorno(404);
+                return remedioResponse;
+            }
+            RemediosEntity remediosEntity1 = new RemediosEntity();
+            remediosEntity1.setId(remedioDTO.getId());
+            remediosEntity1.setNome(remedioDTO.getNome());
+            remediosEntity1.setQuantidade(remedioDTO.getQuantidade());
+            remediosEntity1.setValor(remedioDTO.getValor());
+            remediosEntity1.setImg(remedioDTO.getImg());
+            repository.save(remediosEntity1);
 
+        } catch (Exception ex) {
+            throw new Exception(ex.getCause());
+        }
+        remedioResponse.setCodRetorno(201);
+        remedioResponse.setMensagem("Remedio has been updated");
+        remedioResponse.getRemedio().add(remedioDTO);
+
+        return remedioResponse;
+    }
 
 
 }

@@ -22,6 +22,7 @@ public class FarmaceuticoService {
             List<FarmaceuticoEntity> listaFarmaceuticosEntity = repository.findAll();
             for (FarmaceuticoEntity farmaceuticoEntity : listaFarmaceuticosEntity) {
                 FarmaceuticoDTO farmaceutico = new FarmaceuticoDTO();
+                farmaceutico.setId(farmaceuticoEntity.getId());
                 farmaceutico.setNome(farmaceuticoEntity.getNome());
                 farmaceutico.setCrf(farmaceuticoEntity.getCRF());
                 farmaceutico.setCpf_cnpj(farmaceuticoEntity.getCPF_CNPJ());

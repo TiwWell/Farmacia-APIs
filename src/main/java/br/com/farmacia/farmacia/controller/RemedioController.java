@@ -29,5 +29,10 @@ public class RemedioController {
     public RemedioResponse adicionarRemedio(@RequestBody RemedioDTO remedioDTO) throws Exception {
         return service.adicionarRemedio(remedioDTO);
     }
+
+    @PutMapping(value = "/update-remedio")
+    public RemedioResponse updateRemedio(@RequestBody RemedioDTO remedioDTO) throws Exception {
+        return service.updateRemedio(remedioDTO);
+    }
 }
 
