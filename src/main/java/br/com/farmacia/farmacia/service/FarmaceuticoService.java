@@ -49,6 +49,7 @@ public class FarmaceuticoService {
         farmaceuticoResponse.setFarmaceutico(new ArrayList<>());
         try {
             FarmaceuticoEntity farmaceuticoEntity = new FarmaceuticoEntity();
+            farmaceuticoEntity.setId(farmaceuticoDTO.getId());
             farmaceuticoEntity.setNome(farmaceuticoDTO.getNome());
             farmaceuticoEntity.setCRF(farmaceuticoDTO.getCrf());
             farmaceuticoEntity.setCPF_CNPJ(farmaceuticoDTO.getCpf_cnpj());

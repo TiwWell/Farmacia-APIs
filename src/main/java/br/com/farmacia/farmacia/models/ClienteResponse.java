@@ -5,14 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Cliente {
-    String Nome;
-    String Endereco;
-    String RG;
-    String Telefone;
+public class ClienteResponse {
 
+    private int codRetorno;
+    private String mensagem;
+    private List<ClienteDTO> cliente;
 }
