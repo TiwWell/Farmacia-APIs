@@ -34,4 +34,9 @@ public class FarmaceuticoController {
         return service.adicionarFarmaceutico(farmaceuticoDTO);
     }
 
+    @PutMapping(value = "/update-farmaceutico")
+    public FarmaceuticoResponse updateFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception{
+        return service.updateFarmaceutico(farmaceuticoDTO);
+    }
+
 }
