@@ -3,15 +3,15 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-    datasource:
-      url: jdbc:postgresql://localhost:5432/Farmacia
-      username: sa
-      password: 123456
-    jpa:
-      show-sql: true
-      hibernate:
-        ddl-auto: none
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    sql:
-      init:
-        mode: always
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Farmacia
+    username: sa
+    password: 123456
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: always
