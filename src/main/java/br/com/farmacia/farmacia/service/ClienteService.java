@@ -42,6 +42,10 @@ public class ClienteService {
         if (clienteDTO.getCpf_cnpj().length() == 11) {
             clienteDTO.setCpf_cnpj(clienteDTO.getCpf_cnpj().substring(0, 3) + "." + clienteDTO.getCpf_cnpj().substring(3, 6) + "." + clienteDTO.getCpf_cnpj().substring(6, 9) + "-" + clienteDTO.getCpf_cnpj().substring(9));
 
+        } else if (clienteDTO.getCpf_cnpj().length() == 14) {
+            clienteDTO.setCpf_cnpj(clienteDTO.getCpf_cnpj().substring(0, 2) + "." + clienteDTO.getCpf_cnpj().substring(2, 5) + "." + clienteDTO.getCpf_cnpj().substring(5, 8) + "/" + clienteDTO.getCpf_cnpj().substring(8, 12) + "-" + clienteDTO.getCpf_cnpj().substring(12));
+        } else {
+            throw new Exception();
         }
         ClienteResponse clienteResponse = new ClienteResponse();
         clienteResponse.setCliente(new ArrayList<>());
