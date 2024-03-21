@@ -7,6 +7,7 @@ import br.com.farmacia.farmacia.repository.FarmaceuticoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ public class FarmaceuticoService {
                 farmaceutico.setNome(farmaceuticoEntity.getNome());
                 farmaceutico.setCrf(farmaceuticoEntity.getCRF());
                 farmaceutico.setCpf_cnpj(farmaceuticoEntity.getCPF_CNPJ());
+                farmaceutico.setDesativado(farmaceuticoEntity.getDesativado());
                 listaFarmaceutico.add(farmaceutico);
             }
         } catch (Exception ex) {
@@ -55,14 +57,14 @@ public class FarmaceuticoService {
             farmaceuticoEntity.setCRF(farmaceuticoDTO.getCrf());
             farmaceuticoEntity.setCPF_CNPJ(farmaceuticoDTO.getCpf_cnpj());
             repository.save(farmaceuticoEntity);
-            FarmaceuticoDTO farmaceutico = new FarmaceuticoDTO(farmaceuticoEntity.getId(), farmaceuticoEntity.getNome(), farmaceuticoEntity.getCPF_CNPJ(), farmaceuticoEntity.getCRF());
+            FarmaceuticoDTO farmaceutico = new FarmaceuticoDTO(farmaceuticoEntity.getId(), farmaceuticoEntity.getNome(), farmaceuticoEntity.getCPF_CNPJ(), farmaceuticoEntity.getCRF(), farmaceuticoEntity.getDesativado());
             farmaceuticoResponse.getFarmaceutico().add(farmaceutico);
 
 
         } catch (Exception ex) {
             throw new Exception(ex.getCause());
         }
-        farmaceuticoResponse.setMensagem("Farmaceutico created sucessfully");
+        farmaceuticoResponse.setMensagem("Farmaceutico criado com sucesso");
         farmaceuticoResponse.setCodRetorno(201);
         return farmaceuticoResponse;
     }
@@ -81,7 +83,7 @@ public class FarmaceuticoService {
         try {
             Optional<FarmaceuticoEntity> farmaceuticoEntity = repository.findById((long)farmaceuticoDTO.getId());
             if (!farmaceuticoEntity.isPresent()) {
-                farmaceuticoResponse.setMensagem("This farmaceutico does not exist into the database");
+                farmaceuticoResponse.setMensagem("Esse farmaceutico não existe no banco de dados");
                 farmaceuticoResponse.setCodRetorno(404);
                 return farmaceuticoResponse;
 
@@ -91,16 +93,33 @@ public class FarmaceuticoService {
             farmaceuticoEntity1.setNome(farmaceuticoDTO.getNome());
             farmaceuticoEntity1.setCPF_CNPJ(farmaceuticoDTO.getCpf_cnpj());
             farmaceuticoEntity1.setCRF(farmaceuticoDTO.getCrf());
+            farmaceuticoEntity1.setDesativado(farmaceuticoDTO.getDesativado());
             repository.save(farmaceuticoEntity1);
 
         } catch (Exception ex){
             throw new Exception(ex.getCause());
         }
         farmaceuticoResponse.setCodRetorno(201);
-        farmaceuticoResponse.setMensagem("Farmaceutico has been updated");
+        farmaceuticoResponse.setMensagem("Farmaceutico foi atualizado com sucesso");
         farmaceuticoResponse.getFarmaceutico().add(farmaceuticoDTO);
 
         return farmaceuticoResponse;
 
     }
+   @Transactional
+    public FarmaceuticoResponse desativarFarmaceutico (int id) throws Exception {
+        FarmaceuticoResponse response = new FarmaceuticoResponse();
+        try {
+            repository.desativarFarmaceutico(id);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setCodRetorno(500);
+            response.setMensagem("Erro ao desativar o farmaceutico: " + ex.getMessage());
+        }
+        response.setCodRetorno(202);
+        response.setMensagem("Farmaceutico foi desativado com sucesso");
+        return response;
+
+    }
+
 }

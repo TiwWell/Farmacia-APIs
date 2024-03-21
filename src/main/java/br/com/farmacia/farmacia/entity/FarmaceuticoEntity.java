@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table (name = "Farmaceuticos")
+@Table (name = "Farmaceuticos" , schema = "public")
 @Data
 public class FarmaceuticoEntity {
     @Id
@@ -21,4 +21,7 @@ public class FarmaceuticoEntity {
 
     @Column (name = "CPF_CNPJ")
     private String CPF_CNPJ;
+
+    @Column(name = "desativado")
+    private int desativado;
 }

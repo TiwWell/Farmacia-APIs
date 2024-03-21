@@ -24,10 +24,10 @@ public class FarmaceuticoController {
         return service.getFarmaceuticos();
     }
 
-//    @DeleteMapping(value = "Deletar-farmaceutico/{id}")
-//    public String deletarFarmaceutico(@PathVariable Long id) throws Exception{
-//        return service.deletarFarmaceutico(id);
-//    }
+   @GetMapping(value = "/desativar-farmaceutico/{id}")
+    public FarmaceuticoResponse desativarFarmaceutico(@PathVariable int id) throws Exception{
+        return service.desativarFarmaceutico(id);
+    }
 
     @PostMapping(value = "/adicionar-farmaceutico")
     public FarmaceuticoResponse adicionarFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
