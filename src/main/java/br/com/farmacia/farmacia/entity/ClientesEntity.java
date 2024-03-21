@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "Clientes")
+@Table(name = "clientes")
 @Data
 public class ClientesEntity {
 
@@ -23,6 +23,9 @@ public class ClientesEntity {
     @Column(name = "telefone")
     private String telefone;
 
-    @Column(name = "endereço")
+    @Column(name = "endereco")
     private String endereco;
+
+    @Column(name = "desativado")
+    private int desativado;
 }

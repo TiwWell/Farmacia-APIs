@@ -2,8 +2,6 @@ package br.com.farmacia.farmacia.controller;
 
 import br.com.farmacia.farmacia.models.ClienteDTO;
 import br.com.farmacia.farmacia.models.ClienteResponse;
-import br.com.farmacia.farmacia.models.RemedioDTO;
-import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +28,9 @@ public class ClienteController {
         return service.adicionarClientes(clienteDTO);
     }
 
-    @DeleteMapping(value = "/deletar-cliente/{id}")
-    public String deletarCliente(@PathVariable Long id) throws Exception {
-        return service.deletarCliente(id);
+    @GetMapping(value = "/desativar-cliente/{id}")
+    public ClienteResponse desativarCliente(@PathVariable int id) throws Exception {
+        return service.desativarCliente(id);
     }
 
     @PutMapping(value = "/update-cliente")

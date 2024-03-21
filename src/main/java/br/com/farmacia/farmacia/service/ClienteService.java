@@ -4,10 +4,10 @@ import br.com.farmacia.farmacia.entity.ClientesEntity;
 import br.com.farmacia.farmacia.models.ClienteDTO;
 import br.com.farmacia.farmacia.models.ClienteResponse;
 import br.com.farmacia.farmacia.repository.ClientesRepository;
-import ch.qos.logback.core.net.server.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +28,7 @@ public class ClienteService {
                 cliente.setCpf_cnpj(clientesEntity.getCpf_cnpj());
                 cliente.setTelefone(clientesEntity.getTelefone());
                 cliente.setEndereco(clientesEntity.getEndereco());
+                cliente.setDesativado(clientesEntity.getDesativado());
                 listaDeClientes.add(cliente);
             }
         } catch (Exception ex) {
@@ -57,29 +58,16 @@ public class ClienteService {
             clientesEntity.setTelefone(clienteDTO.getTelefone());
             clientesEntity.setEndereco(clienteDTO.getEndereco());
             repository.save(clientesEntity);
-            ClienteDTO cliente = new ClienteDTO(clientesEntity.getId(), clientesEntity.getNome(), clientesEntity.getCpf_cnpj(), clientesEntity.getTelefone(), clientesEntity.getEndereco());
+            ClienteDTO cliente = new ClienteDTO(clientesEntity.getId(), clientesEntity.getNome(), clientesEntity.getCpf_cnpj(), clientesEntity.getTelefone(), clientesEntity.getEndereco(), clientesEntity.getDesativado());
             clienteResponse.getCliente().add(cliente);
 
         } catch (Exception ex) {
 
         }
-        clienteResponse.setMensagem("Cliente created sucessfully");
+        clienteResponse.setMensagem("Cliente criado com sucesso");
         clienteResponse.setCodRetorno(201);
         return clienteResponse;
 
-    }
-
-    public String deletarCliente(Long id) throws Exception {
-        try {
-            Optional<ClientesEntity> clientesEntity = repository.findById(id);
-            if (!clientesEntity.isPresent()) {
-                return "Cliente ID does not exist in the database";
-            }
-            repository.deleteById(id);
-        } catch (Exception ex) {
-            throw new Exception(ex.getCause());
-        }
-        return "Deleted with sucessfull!!";
     }
 
     public ClienteResponse updateCliente(ClienteDTO clienteDTO) throws Exception {
@@ -95,7 +83,7 @@ public class ClienteService {
             Optional<ClientesEntity> clientesEntity = repository.findById((long)clienteDTO.getId());
 
             if (!clientesEntity.isPresent()) {
-                clienteResponse.setMensagem("This Cliente does not exist into the database");
+                clienteResponse.setMensagem("Esse cliente não existe no banco de dados");
                 clienteResponse.setCodRetorno(404);
                 return clienteResponse;
             }
@@ -105,17 +93,33 @@ public class ClienteService {
             clientesEntity1.setCpf_cnpj(clienteDTO.getCpf_cnpj());
             clientesEntity1.setTelefone(clienteDTO.getTelefone());
             clientesEntity1.setEndereco(clienteDTO.getEndereco());
+            clientesEntity1.setDesativado(clienteDTO.getDesativado());
             repository.save(clientesEntity1);
 
         } catch (Exception ex) {
             throw new Exception(ex.getCause());
         }
         clienteResponse.setCodRetorno(201);
-        clienteResponse.setMensagem("Cliente has been update");
+        clienteResponse.setMensagem("Cliente atualizado com sucesso");
         clienteResponse.getCliente().add(clienteDTO);
 
         return clienteResponse;
 
+    }
+
+    @Transactional
+    public ClienteResponse desativarCliente(int id) throws Exception {
+        ClienteResponse response = new ClienteResponse();
+        try{
+            repository.desativarCliente(id);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            response.setCodRetorno(500); // Código de erro interno do servidor
+            response.setMensagem("Erro ao desativar o cliente: " + ex.getMessage());
+        }
+        response.setCodRetorno(202);
+        response.setMensagem("Cliente desativado com sucesso");
+        return response;
     }
 }
 

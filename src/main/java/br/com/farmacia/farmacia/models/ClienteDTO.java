@@ -16,5 +16,6 @@ public class ClienteDTO {
     String cpf_cnpj;
     String telefone;
     String endereco;
+    int desativado;
 
 }
