@@ -13,5 +13,6 @@ public class FarmaceuticoDTO {
     String nome;
     String cpf_cnpj;
     String crf;
+    int desativado;
 
 }
