@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "Remedios")
+@Table(name = "Remedios" , schema = "public")
 @Data
 public class RemediosEntity {
     @Id
@@ -23,5 +23,8 @@ public class RemediosEntity {
 
     @Column(name = "img")
     private String img;
+
+    @Column(name = "desativado")
+    private int desativado;
 }
 

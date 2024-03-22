@@ -1,12 +1,14 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.RemediosEntity;
+import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.models.RemedioDTO;
 import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.repository.RemediosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,7 @@ public class RemedioService {
                 remedio.setValor(remediosEntity.getValor());
                 remedio.setQuantidade(remediosEntity.getQuantidade());
                 remedio.setImg(remediosEntity.getImg());
+                remedio.setDesativado(remediosEntity.getDesativado());
                 listaDeRemedio.add(remedio);
             }
         } catch (Exception ex) {
@@ -64,7 +67,7 @@ public class RemedioService {
             remedioentity.setQuantidade(remedioDTO.getQuantidade());
             remedioentity.setImg(remedioDTO.getImg());
             repository.save(remedioentity);
-            RemedioDTO remedio = new RemedioDTO(remedioentity.getId(), remedioentity.getNome(), remedioentity.getValor(), remedioentity.getQuantidade(), remedioentity.getImg());
+            RemedioDTO remedio = new RemedioDTO(remedioentity.getId(), remedioentity.getNome(), remedioentity.getValor(), remedioentity.getQuantidade(), remedioentity.getImg(), remedioentity.getDesativado());
             remedioResponse.getRemedio().add(remedio);
 
 
@@ -93,6 +96,7 @@ public class RemedioService {
             remediosEntity1.setQuantidade(remedioDTO.getQuantidade());
             remediosEntity1.setValor(remedioDTO.getValor());
             remediosEntity1.setImg(remedioDTO.getImg());
+            remediosEntity1.setDesativado(remedioDTO.getDesativado());
             repository.save(remediosEntity1);
 
         } catch (Exception ex) {
@@ -104,6 +108,20 @@ public class RemedioService {
 
         return remedioResponse;
     }
+    @Transactional
+    public FarmaceuticoResponse desativarRemedio (int id) throws Exception {
+        FarmaceuticoResponse response = new FarmaceuticoResponse();
+        try {
+            repository.desativarRemedio(id);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setCodRetorno(500);
+            response.setMensagem("Erro ao desativar o remedio: " + ex.getMessage());
+        }
+        response.setCodRetorno(202);
+        response.setMensagem("remedio foi desativado com sucesso");
+        return response;
 
+    }
 
 }

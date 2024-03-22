@@ -13,5 +13,6 @@ public class RemedioDTO {
     double valor;
     int quantidade;
     String img;
+    int desativado;
 
 }

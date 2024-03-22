@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 public interface FarmaceuticoRepository extends JpaRepository<FarmaceuticoEntity, Long> {
     @Modifying
     @Query(value = "update farmaceuticos set desativado = 1 WHERE id = ?" , nativeQuery = true)
-    void desativarFarmaceutico (int idCliente);
+    void desativarFarmaceutico (int idFarmaceutico);
 
 
 
