@@ -1,7 +1,6 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.RemediosEntity;
-import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.models.RemedioDTO;
 import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.repository.RemediosRepository;
@@ -80,7 +79,7 @@ public class RemedioService {
 
     }
 
-    public RemedioResponse updateRemedio(RemedioDTO remedioDTO) throws Exception {
+    public RemedioResponse atualizarRemedio(RemedioDTO remedioDTO) throws Exception {
         RemedioResponse remedioResponse = new RemedioResponse();
         remedioResponse.setRemedio(new ArrayList<>());
         try {
@@ -108,9 +107,10 @@ public class RemedioService {
 
         return remedioResponse;
     }
-    @Transactional
-    public FarmaceuticoResponse desativarRemedio (int id) throws Exception {
-        FarmaceuticoResponse response = new FarmaceuticoResponse();
+
+
+    public RemedioResponse desativarRemedio(int id) {
+        RemedioResponse response = new RemedioResponse();
         try {
             repository.desativarRemedio(id);
         } catch (Exception ex) {

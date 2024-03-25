@@ -1,3 +1,9 @@
+info:
+  app:
+    name: Farmacia API's
+    description: API que permite controlar informações da base de dados de uma farmácia através de métodos Rest HTTP
+    version: 1.0.0
+
 spring:
   mvc:
     pathmatch:

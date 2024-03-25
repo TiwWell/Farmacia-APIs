@@ -5,6 +5,7 @@ import br.com.farmacia.farmacia.models.ClienteDTO;
 import br.com.farmacia.farmacia.models.ClienteResponse;
 import br.com.farmacia.farmacia.repository.ClientesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -108,6 +109,7 @@ public class ClienteService {
     }
 
     @Transactional
+    @Modifying
     public ClienteResponse desativarCliente(int id) throws Exception {
         ClienteResponse response = new ClienteResponse();
         try{

@@ -15,14 +15,14 @@ public class RemedioController {
     @Autowired
     private RemedioService service;
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(value = "/lista-remedio")
+    @GetMapping(value = "/listar-remedio")
     public List<RemedioDTO> listaRemedios() throws Exception {
         return service.getRemedio();
     }
 
-    @DeleteMapping(value = "/deletar-remedio/{id}")
-    public String deletarRemedios (@PathVariable Long id) throws Exception{
-        return service.deletarRemedios(id);
+    @DeleteMapping(value = "/desativar-remedio/{id}")
+    public RemedioResponse desativarRemedios(@PathVariable int id) {
+        return service.desativarRemedio(id);
     }
 
     @PostMapping(value = "/adicionar-remedio")
@@ -30,9 +30,9 @@ public class RemedioController {
         return service.adicionarRemedio(remedioDTO);
     }
 
-    @PutMapping(value = "/update-remedio")
-    public RemedioResponse updateRemedio(@RequestBody RemedioDTO remedioDTO) throws Exception {
-        return service.updateRemedio(remedioDTO);
+    @PutMapping(value = "/atualizar-remedio")
+    public RemedioResponse atualizarRemedio(@RequestBody RemedioDTO remedioDTO) throws Exception {
+        return service.atualizarRemedio(remedioDTO);
     }
 }
 

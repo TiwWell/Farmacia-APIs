@@ -1,8 +1,8 @@
 package br.com.farmacia.farmacia.entity;
 
 
-import jakarta.persistence.*;
 import lombok.Data;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "clientes")
