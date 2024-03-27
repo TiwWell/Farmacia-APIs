@@ -18,6 +18,7 @@ public class FarmaceuticoController {
     private FarmaceuticoService service;
 
     @CrossOrigin(origins = "http://localhost:5173")
+    @ApiOperation(value = "Liste farmaceuticos a base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/lista-farmaceutico")
     public List<FarmaceuticoDTO> listaFarmaceuticos() throws Exception {
 

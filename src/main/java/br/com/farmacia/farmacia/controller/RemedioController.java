@@ -18,7 +18,9 @@ public class RemedioController {
 
     @Autowired
     private RemedioService service;
+
     @CrossOrigin(origins = "http://localhost:5173")
+    @ApiOperation(value = "Liste remedios na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/listar-remedio")
     public List<RemedioDTO> listaRemedios() throws Exception {
         return service.getRemedio();
