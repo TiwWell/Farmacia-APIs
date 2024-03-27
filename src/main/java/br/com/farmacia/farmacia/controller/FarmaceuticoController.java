@@ -1,10 +1,9 @@
 package br.com.farmacia.farmacia.controller;
 
-import br.com.farmacia.farmacia.models.FarmaceuticoDTO;
-import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
-import br.com.farmacia.farmacia.models.RemedioDTO;
-import br.com.farmacia.farmacia.models.RemedioResponse;
+import br.com.farmacia.farmacia.models.*;
 import br.com.farmacia.farmacia.service.FarmaceuticoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api")
+@Api(description = "Endpoints para listar, adicionar, atualizar e desativar farmaceuticos de uma farmácia", tags = {"Farmaceuticos"})
 public class FarmaceuticoController {
 
     @Autowired
@@ -23,17 +23,19 @@ public class FarmaceuticoController {
 
         return service.getFarmaceuticos();
     }
-
+   @ApiOperation(value = "Desative farmaceuticos na base de dados", response = ClienteResponse.class)
    @GetMapping(value = "/desativar-farmaceutico/{id}")
     public FarmaceuticoResponse desativarFarmaceutico(@PathVariable int id) throws Exception{
         return service.desativarFarmaceutico(id);
     }
 
+    @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = ClienteResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
     public FarmaceuticoResponse adicionarFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
         return service.adicionarFarmaceutico(farmaceuticoDTO);
     }
 
+    @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = ClienteResponse.class)
     @PutMapping(value = "/update-farmaceutico")
     public FarmaceuticoResponse updateFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception{
         return service.updateFarmaceutico(farmaceuticoDTO);
