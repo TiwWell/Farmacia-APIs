@@ -26,7 +26,7 @@ public class RemedioController {
         return service.getRemedio();
     }
     @ApiOperation(value = "Desative remedios na base de dados", response = ClienteResponse.class)
-    @DeleteMapping(value = "/desativar-remedio/{id}")
+    @GetMapping(value = "/desativar-remedio/{id}")
     public RemedioResponse desativarRemedios(@PathVariable int id) {
         return service.desativarRemedio(id);
     }
