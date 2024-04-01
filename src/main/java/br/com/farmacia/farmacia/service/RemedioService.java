@@ -7,6 +7,7 @@ import br.com.farmacia.farmacia.repository.RemediosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,7 @@ public class RemedioService {
     }
 
 
+    @Transactional
     public RemedioResponse desativarRemedio(int id) {
         RemedioResponse response = new RemedioResponse();
         try {

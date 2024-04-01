@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 public class ClienteDTO {
 
-    int id;
+    long id;
     String nome;
     String cpf_cnpj;
     String telefone;

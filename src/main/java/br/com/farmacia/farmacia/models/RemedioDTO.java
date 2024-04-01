@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RemedioDTO {
-    int id;
+    long id;
     String nome;
     double valor;
     int quantidade;

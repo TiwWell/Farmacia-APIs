@@ -109,7 +109,6 @@ public class ClienteService {
     }
 
     @Transactional
-    @Modifying
     public ClienteResponse desativarCliente(int id) throws Exception {
         ClienteResponse response = new ClienteResponse();
         try{

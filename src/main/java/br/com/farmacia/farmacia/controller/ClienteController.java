@@ -37,7 +37,7 @@ public class ClienteController {
         return service.desativarCliente(id);
     }
     @ApiOperation(value = "Atualize clientes na base de dados", response = ClienteResponse.class)
-    @PutMapping(value = "/update-cliente")
+    @PutMapping(value = "/atualizar-cliente")
     public ClienteResponse updateCliente(@RequestBody ClienteDTO clienteDTO) throws Exception {
         return service.updateCliente(clienteDTO);
 

@@ -37,7 +37,7 @@ public class FarmaceuticoController {
     }
 
     @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = ClienteResponse.class)
-    @PutMapping(value = "/update-farmaceutico")
+    @PutMapping(value = "/atualizar-farmaceutico")
     public FarmaceuticoResponse updateFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception{
         return service.updateFarmaceutico(farmaceuticoDTO);
     }

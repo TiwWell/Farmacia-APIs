@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FarmaceuticoDTO {
 
-    int id;
+    long id;
     String nome;
     String cpf_cnpj;
     String crf;
