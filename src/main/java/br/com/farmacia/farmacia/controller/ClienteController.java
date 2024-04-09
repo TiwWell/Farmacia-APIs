@@ -18,7 +18,7 @@ public class ClienteController {
 
     @Autowired
     private ClienteService service;
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Liste clientes na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/lista-cliente")
     public List<ClienteDTO> listaCliente() throws Exception {
