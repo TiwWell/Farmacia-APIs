@@ -118,7 +118,7 @@ public class ClienteService {
             response.setCodRetorno(500); // Código de erro interno do servidor
             response.setMensagem("Erro ao desativar o cliente: " + ex.getMessage());
         }
-        response.setCodRetorno(202);
+        response.setCodRetorno(200);
         response.setMensagem("Cliente desativado com sucesso");
         return response;
     }
