@@ -31,6 +31,8 @@ public class ClienteController {
     public ClienteResponse adicionarClientes(@RequestBody ClienteDTO clienteDTO) throws Exception {
         return service.adicionarClientes(clienteDTO);
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Desative clientes na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/desativar-cliente/{id}")
     public ClienteResponse desativarCliente(@PathVariable int id) throws Exception {
