@@ -19,6 +19,9 @@ public class FarmaciaApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/lista-cliente").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/atualizar-cliente").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/adicionar-cliente").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/desativar-cliente").allowedOrigins("http://localhost:3000");
 			}
 		};
 	}

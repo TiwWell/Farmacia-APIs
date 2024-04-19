@@ -38,6 +38,8 @@ public class ClienteController {
     public ClienteResponse desativarCliente(@PathVariable int id) throws Exception {
         return service.desativarCliente(id);
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Atualize clientes na base de dados", response = ClienteResponse.class)
     @PutMapping(value = "/atualizar-cliente")
     public ClienteResponse updateCliente(@RequestBody ClienteDTO clienteDTO) throws Exception {
