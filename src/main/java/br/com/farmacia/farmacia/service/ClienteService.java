@@ -122,6 +122,21 @@ public class ClienteService {
         response.setMensagem("Cliente desativado com sucesso");
         return response;
     }
+
+    @Transactional
+    public ClienteResponse reativarCliente(int id) throws Exception {
+        ClienteResponse response = new ClienteResponse();
+        try{
+            repository.reativarCliente(id);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            response.setCodRetorno(500); // Código de erro interno do servidor
+            response.setMensagem("Erro ao reativar o cliente: " + ex.getMessage());
+        }
+        response.setCodRetorno(200);
+        response.setMensagem("Cliente reativado com sucesso");
+        return response;
+    }
 }
 
 

@@ -47,4 +47,12 @@ public class ClienteController {
 
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "Reative clientes na base de dados", response = ClienteResponse.class)
+    @GetMapping(value = "/reativar-cliente/{id}")
+    public ClienteResponse reativarCliente(@PathVariable int id) throws Exception {
+        return service.reativarCliente(id);
+    }
+
+
 }
