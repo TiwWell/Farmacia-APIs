@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ClienteService {
@@ -32,9 +30,11 @@ public class ClienteService {
                 cliente.setDesativado(clientesEntity.getDesativado());
                 listaDeClientes.add(cliente);
             }
+            Collections.sort(listaDeClientes, Comparator.comparing(ClienteDTO::getNome));
         } catch (Exception ex) {
             throw new Exception(ex.getCause());
         }
+
 
         return listaDeClientes;
     }
