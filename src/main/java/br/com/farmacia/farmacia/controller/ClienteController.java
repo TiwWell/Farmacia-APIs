@@ -26,6 +26,7 @@ public class ClienteController {
 
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Adicione clientes a base de dados", response = ClienteResponse.class)
     @PostMapping(value = "/adicionar-cliente")
     public ClienteResponse adicionarClientes(@RequestBody ClienteDTO clienteDTO) throws Exception {
