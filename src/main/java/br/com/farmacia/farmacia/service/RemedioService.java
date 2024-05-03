@@ -1,6 +1,8 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.RemediosEntity;
+import br.com.farmacia.farmacia.models.ClienteDTO;
+import br.com.farmacia.farmacia.models.ClienteResponse;
 import br.com.farmacia.farmacia.models.RemedioDTO;
 import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.repository.RemediosRepository;
@@ -9,9 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RemedioService {
@@ -33,6 +33,7 @@ public class RemedioService {
                 remedio.setDesativado(remediosEntity.getDesativado());
                 listaDeRemedio.add(remedio);
             }
+            Collections.sort(listaDeRemedio, Comparator.comparing(RemedioDTO::getNome));
         } catch (Exception ex) {
             throw new Exception(ex.getCause());
 
@@ -126,4 +127,18 @@ public class RemedioService {
 
     }
 
+    @Transactional
+    public RemedioResponse reativarRemedio(int id) {
+        RemedioResponse response = new RemedioResponse();
+        try{
+            repository.reativarRemedio(id);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            response.setCodRetorno(500); // Código de erro interno do servidor
+            response.setMensagem("Erro ao reativar o remedio: " + ex.getMessage());
+        }
+        response.setCodRetorno(200);
+        response.setMensagem("Remedio reativado com sucesso");
+        return response;
+    }
 }

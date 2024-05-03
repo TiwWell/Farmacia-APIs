@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value="/api")
 @Api(description = "Endpoints para listar, adicionar, atualizar e desativar remedios de uma farmácia", tags = {"Remedios"})
 public class RemedioController {
@@ -19,7 +20,7 @@ public class RemedioController {
     @Autowired
     private RemedioService service;
 
-    @CrossOrigin(origins = "http://localhost:5173")
+
     @ApiOperation(value = "Liste remedios na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/listar-remedio")
     public List<RemedioDTO> listaRemedios() throws Exception {
@@ -42,5 +43,13 @@ public class RemedioController {
     public RemedioResponse atualizarRemedio(@RequestBody RemedioDTO remedioDTO) throws Exception {
         return service.atualizarRemedio(remedioDTO);
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "Reative remedios na base de dados", response = ClienteResponse.class)
+    @GetMapping(value = "/reativar-remedio/{id}")
+    public RemedioResponse reativarRemedio(@PathVariable int id) throws Exception {
+        return service.reativarRemedio(id);
+    }
+
 }
 

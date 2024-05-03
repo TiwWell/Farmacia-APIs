@@ -9,4 +9,9 @@ public interface RemediosRepository extends JpaRepository<RemediosEntity, Long> 
     @Modifying
     @Query(value = "UPDATE remedios SET desativado = 1 WHERE id = ?" , nativeQuery = true)
     void desativarRemedio (int idRemedio);
+
+    @Modifying
+    @Query(value = "UPDATE remedios SET desativado = 0 WHERE id = ?", nativeQuery = true)
+    void reativarRemedio(int idRemedio);
+
 }
