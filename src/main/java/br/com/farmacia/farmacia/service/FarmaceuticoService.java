@@ -1,16 +1,13 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.FarmaceuticoEntity;
-import br.com.farmacia.farmacia.models.FarmaceuticoDTO;
-import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
+import br.com.farmacia.farmacia.models.*;
 import br.com.farmacia.farmacia.repository.FarmaceuticoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FarmaceuticoService {
@@ -31,6 +28,7 @@ public class FarmaceuticoService {
                 farmaceutico.setDesativado(farmaceuticoEntity.getDesativado());
                 listaFarmaceutico.add(farmaceutico);
             }
+            Collections.sort(listaFarmaceutico, Comparator.comparing(FarmaceuticoDTO::getNome));
         } catch (Exception ex) {
             throw new Exception(ex.getCause());
         }
@@ -81,7 +79,7 @@ public class FarmaceuticoService {
         FarmaceuticoResponse farmaceuticoResponse = new FarmaceuticoResponse();
         farmaceuticoResponse.setFarmaceutico(new ArrayList<>());
         try {
-            Optional<FarmaceuticoEntity> farmaceuticoEntity = repository.findById((long)farmaceuticoDTO.getId());
+            Optional<FarmaceuticoEntity> farmaceuticoEntity = repository.findById((long) farmaceuticoDTO.getId());
             if (!farmaceuticoEntity.isPresent()) {
                 farmaceuticoResponse.setMensagem("Esse farmaceutico não existe no banco de dados");
                 farmaceuticoResponse.setCodRetorno(404);
@@ -96,7 +94,7 @@ public class FarmaceuticoService {
             farmaceuticoEntity1.setDesativado(farmaceuticoDTO.getDesativado());
             repository.save(farmaceuticoEntity1);
 
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new Exception(ex.getCause());
         }
         farmaceuticoResponse.setCodRetorno(201);
@@ -106,8 +104,9 @@ public class FarmaceuticoService {
         return farmaceuticoResponse;
 
     }
-   @Transactional
-    public FarmaceuticoResponse desativarFarmaceutico (int id) throws Exception {
+
+    @Transactional
+    public FarmaceuticoResponse desativarFarmaceutico(int id) throws Exception {
         FarmaceuticoResponse response = new FarmaceuticoResponse();
         try {
             repository.desativarFarmaceutico(id);
@@ -122,4 +121,18 @@ public class FarmaceuticoService {
 
     }
 
+    @Transactional
+    public FarmaceuticoResponse reativarFarmaceutico(int id) throws Exception {
+        FarmaceuticoResponse response = new FarmaceuticoResponse();
+        try{
+            repository.reativarFarmaceutico(id);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            response.setCodRetorno(500); // Código de erro interno do servidor
+            response.setMensagem("Erro ao reativar o farmaceutico: " + ex.getMessage());
+        }
+        response.setCodRetorno(200);
+        response.setMensagem("Farmaceutico reativado com sucesso");
+        return response;
+    }
 }

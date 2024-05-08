@@ -11,6 +11,9 @@ public interface FarmaceuticoRepository extends JpaRepository<FarmaceuticoEntity
     @Query(value = "update farmaceuticos set desativado = 1 WHERE id = ?" , nativeQuery = true)
     void desativarFarmaceutico (int idFarmaceutico);
 
+    @Modifying
+    @Query(value = "UPDATE farmaceuticos SET desativado = 0 WHERE id = ?", nativeQuery = true)
+    void reativarFarmaceutico(int idFaramaceutico);
 
 
 }

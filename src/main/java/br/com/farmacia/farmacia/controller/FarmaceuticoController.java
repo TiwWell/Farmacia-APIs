@@ -17,29 +17,40 @@ public class FarmaceuticoController {
     @Autowired
     private FarmaceuticoService service;
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @ApiOperation(value = "Liste farmaceuticos a base de dados", response = ClienteResponse.class)
-    @GetMapping(value = "/lista-farmaceutico")
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "Liste farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
+    @GetMapping(value = "/listar-farmaceutico")
     public List<FarmaceuticoDTO> listaFarmaceuticos() throws Exception {
 
         return service.getFarmaceuticos();
     }
-   @ApiOperation(value = "Desative farmaceuticos na base de dados", response = ClienteResponse.class)
-   @GetMapping(value = "/desativar-farmaceutico/{id}")
-    public FarmaceuticoResponse desativarFarmaceutico(@PathVariable int id) throws Exception{
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "Desative farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
+    @GetMapping(value = "/desativar-farmaceutico/{id}")
+    public FarmaceuticoResponse desativarFarmaceutico(@PathVariable int id) throws Exception {
         return service.desativarFarmaceutico(id);
     }
 
-    @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = ClienteResponse.class)
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
     public FarmaceuticoResponse adicionarFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
         return service.adicionarFarmaceutico(farmaceuticoDTO);
     }
 
-    @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = ClienteResponse.class)
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @PutMapping(value = "/atualizar-farmaceutico")
-    public FarmaceuticoResponse updateFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception{
+    public FarmaceuticoResponse updateFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
         return service.updateFarmaceutico(farmaceuticoDTO);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "Reative farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
+    @GetMapping(value = "/reativar-farmaceutico/{id}")
+    public FarmaceuticoResponse reativarFarmaceutico(@PathVariable int id) throws Exception {
+        return service.reativarFarmaceutico(id);
     }
 
 }
