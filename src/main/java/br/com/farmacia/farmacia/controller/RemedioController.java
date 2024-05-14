@@ -51,5 +51,12 @@ public class RemedioController {
         return service.reativarRemedio(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "inverter status de remedios na base de dados", response = ClienteResponse.class)
+    @GetMapping(value = "/inverter-status-remedio/{id}")
+    public RemedioResponse inverterStatusRemedio(@PathVariable int id) throws Exception {
+        return service.inverterStatus(id);
+    }
+
 }
 

@@ -6,6 +6,7 @@ import br.com.farmacia.farmacia.models.ClienteResponse;
 import br.com.farmacia.farmacia.models.RemedioDTO;
 import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.repository.RemediosRepository;
+import com.fasterxml.jackson.databind.ext.OptionalHandlerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -130,9 +131,9 @@ public class RemedioService {
     @Transactional
     public RemedioResponse reativarRemedio(int id) {
         RemedioResponse response = new RemedioResponse();
-        try{
+        try {
             repository.reativarRemedio(id);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             response.setCodRetorno(500); // Código de erro interno do servidor
             response.setMensagem("Erro ao reativar o remedio: " + ex.getMessage());
@@ -141,4 +142,39 @@ public class RemedioService {
         response.setMensagem("Remedio reativado com sucesso");
         return response;
     }
+
+    @Transactional
+    public RemedioResponse inverterStatus(int id) {
+        RemedioResponse response = new RemedioResponse();
+        try {
+            Optional<RemediosEntity> remediosEntity = repository.findById((long) id);
+            if (!remediosEntity.isPresent()) {
+                response.setMensagem("O remedio de ID: {" + id + "} não existe na base de dados");
+                response.setCodRetorno(404);
+                return response;
+            } else {
+                response.getRemedio().get(0).setDesativado(remediosEntity.get().getDesativado());
+                response.getRemedio().get(0).setValor(remediosEntity.get().getValor());
+                response.getRemedio().get(0).setId(remediosEntity.get().getId());
+                response.getRemedio().get(0).setNome(remediosEntity.get().getNome());
+                response.getRemedio().get(0).setImg(remediosEntity.get().getImg());
+                response.getRemedio().get(0).setQuantidade(remediosEntity.get().getQuantidade());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setCodRetorno(500); // Código de erro interno do servidor
+            response.setMensagem("Erro ao inverter status do remedio: " + ex.getMessage());
+        }
+        response.setCodRetorno(200);
+        response.setMensagem("Remedio reativado com sucesso");
+        return response;
+
+
+    }
 }
+
+
+
+
+
+
