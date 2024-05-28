@@ -53,4 +53,13 @@ public class FarmaceuticoController {
         return service.reativarFarmaceutico(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "inverter status de farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
+    @GetMapping(value = "/inverter-status-farmaceutico/{id}")
+    public FarmaceuticoResponse inverterStatusFarmaceutico(@PathVariable int id) throws Exception {
+        return service.inverterStatusFarmaceutico(id);
+    }
+
+
+
 }
