@@ -124,9 +124,9 @@ public class FarmaceuticoService {
     @Transactional
     public FarmaceuticoResponse reativarFarmaceutico(int id) throws Exception {
         FarmaceuticoResponse response = new FarmaceuticoResponse();
-        try{
+        try {
             repository.reativarFarmaceutico(id);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             response.setCodRetorno(500); // Código de erro interno do servidor
             response.setMensagem("Erro ao reativar o farmaceutico: " + ex.getMessage());
@@ -134,5 +134,40 @@ public class FarmaceuticoService {
         response.setCodRetorno(200);
         response.setMensagem("Farmaceutico reativado com sucesso");
         return response;
+    }
+
+    @Transactional
+    public FarmaceuticoResponse inverterStatusFarmaceutico(int id) {
+        FarmaceuticoResponse response = new FarmaceuticoResponse();
+        response.setFarmaceutico(new ArrayList<>());
+        try {
+            Optional<FarmaceuticoEntity> farmaceuticoEntity = repository.findById((long) id);
+            if (!farmaceuticoEntity.isPresent()) {
+                response.setMensagem("O farmaceutico de ID: {" + id + "} não existe na base de dados");
+                response.setCodRetorno(404);
+                return response;
+            } else {
+                repository.inverterStatusFarmaceutico(id);
+                response.getFarmaceutico().add(new FarmaceuticoDTO());
+                if (farmaceuticoEntity.get().getDesativado() == 0) {
+                    response.getFarmaceutico().get(0).setDesativado(0);
+                } else {
+                    response.getFarmaceutico().get(0).setDesativado(1);
+                }
+                response.getFarmaceutico().get(0).setCrf(farmaceuticoEntity.get().getCRF());
+                response.getFarmaceutico().get(0).setId(farmaceuticoEntity.get().getId());
+                response.getFarmaceutico().get(0).setNome(farmaceuticoEntity.get().getNome());
+                response.getFarmaceutico().get(0).setCpf_cnpj(farmaceuticoEntity.get().getCPF_CNPJ());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setCodRetorno(500); // Código de erro interno do servidor
+            response.setMensagem("Erro ao inverter status do farmaceutico: " + ex.getMessage());
+        }
+        response.setCodRetorno(200);
+        response.setMensagem("farmaceutico reativado com sucesso");
+        return response;
+
+
     }
 }
