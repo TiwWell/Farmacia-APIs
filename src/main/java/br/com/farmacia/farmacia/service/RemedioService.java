@@ -1,16 +1,12 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.RemediosEntity;
-import br.com.farmacia.farmacia.models.ClienteDTO;
-import br.com.farmacia.farmacia.models.ClienteResponse;
 import br.com.farmacia.farmacia.models.RemedioDTO;
 import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.repository.RemediosRepository;
-import com.fasterxml.jackson.databind.ext.OptionalHandlerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -144,8 +140,10 @@ public class RemedioService {
     }
 
     @Transactional
-    public RemedioResponse inverterStatus(int id) {
+    public RemedioResponse atualizarStatusRemedio(int id) {
         RemedioResponse response = new RemedioResponse();
+        response.setRemedio(new ArrayList<>());
+
         try {
             Optional<RemediosEntity> remediosEntity = repository.findById((long) id);
             if (!remediosEntity.isPresent()) {
@@ -153,7 +151,13 @@ public class RemedioService {
                 response.setCodRetorno(404);
                 return response;
             } else {
-                response.getRemedio().get(0).setDesativado(remediosEntity.get().getDesativado());
+                repository.inverterStatusRemedio(id);
+                response.getRemedio().add(new RemedioDTO());
+                if(remediosEntity.get().getDesativado() == 0) {
+                    response.getRemedio().get(0).setDesativado(1);
+                }else {
+                    response.getRemedio().get(0).setDesativado(0);
+                }
                 response.getRemedio().get(0).setValor(remediosEntity.get().getValor());
                 response.getRemedio().get(0).setId(remediosEntity.get().getId());
                 response.getRemedio().get(0).setNome(remediosEntity.get().getNome());

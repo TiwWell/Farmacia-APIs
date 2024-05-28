@@ -6,7 +6,9 @@ import br.com.farmacia.farmacia.models.RemedioResponse;
 import br.com.farmacia.farmacia.service.RemedioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +36,7 @@ public class RemedioController {
 
     @ApiOperation(value = "Adicione remedios a base de dados", response = ClienteResponse.class)
     @PostMapping(value = "/adicionar-remedio")
-    public RemedioResponse adicionarRemedio(@RequestBody RemedioDTO remedioDTO) throws Exception {
+    public RemedioResponse adicionarRemedio(@ApiParam(value = "Conjunto de dados para adicionar remedio no banco de dados") @RequestBody @Validated RemedioDTO remedioDTO) throws Exception {
         return service.adicionarRemedio(remedioDTO);
     }
 
@@ -55,7 +57,7 @@ public class RemedioController {
     @ApiOperation(value = "inverter status de remedios na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/inverter-status-remedio/{id}")
     public RemedioResponse inverterStatusRemedio(@PathVariable int id) throws Exception {
-        return service.inverterStatus(id);
+        return service.atualizarStatusRemedio(id);
     }
 
 }
