@@ -150,9 +150,9 @@ public class FarmaceuticoService {
                 repository.inverterStatusFarmaceutico(id);
                 response.getFarmaceutico().add(new FarmaceuticoDTO());
                 if (farmaceuticoEntity.get().getDesativado() == 0) {
-                    response.getFarmaceutico().get(0).setDesativado(0);
-                } else {
                     response.getFarmaceutico().get(0).setDesativado(1);
+                } else {
+                    response.getFarmaceutico().get(0).setDesativado(0);
                 }
                 response.getFarmaceutico().get(0).setCrf(farmaceuticoEntity.get().getCRF());
                 response.getFarmaceutico().get(0).setId(farmaceuticoEntity.get().getId());
