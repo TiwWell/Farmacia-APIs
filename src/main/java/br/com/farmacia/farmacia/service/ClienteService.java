@@ -1,8 +1,11 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.ClientesEntity;
+import br.com.farmacia.farmacia.entity.FarmaceuticoEntity;
 import br.com.farmacia.farmacia.models.ClienteDTO;
 import br.com.farmacia.farmacia.models.ClienteResponse;
+import br.com.farmacia.farmacia.models.FarmaceuticoDTO;
+import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.repository.ClientesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -81,7 +84,7 @@ public class ClienteService {
         ClienteResponse clienteResponse = new ClienteResponse();
         clienteResponse.setCliente(new ArrayList<>());
         try {
-            Optional<ClientesEntity> clientesEntity = repository.findById((long)clienteDTO.getId());
+            Optional<ClientesEntity> clientesEntity = repository.findById((long) clienteDTO.getId());
 
             if (!clientesEntity.isPresent()) {
                 clienteResponse.setMensagem("Esse cliente não existe no banco de dados");
@@ -111,9 +114,9 @@ public class ClienteService {
     @Transactional
     public ClienteResponse desativarCliente(int id) throws Exception {
         ClienteResponse response = new ClienteResponse();
-        try{
+        try {
             repository.desativarCliente(id);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             response.setCodRetorno(500); // Código de erro interno do servidor
             response.setMensagem("Erro ao desativar o cliente: " + ex.getMessage());
@@ -126,15 +129,48 @@ public class ClienteService {
     @Transactional
     public ClienteResponse reativarCliente(int id) throws Exception {
         ClienteResponse response = new ClienteResponse();
-        try{
+        try {
             repository.reativarCliente(id);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             response.setCodRetorno(500); // Código de erro interno do servidor
             response.setMensagem("Erro ao reativar o cliente: " + ex.getMessage());
         }
         response.setCodRetorno(200);
         response.setMensagem("Cliente reativado com sucesso");
+        return response;
+    }
+
+    @Transactional
+    public ClienteResponse inverterStatusCliente(int id) {
+        ClienteResponse response = new ClienteResponse();
+        response.setCliente(new ArrayList<>());
+        try {
+            Optional<ClientesEntity> clienteEntity = repository.findById((long) id);
+            if (!clienteEntity.isPresent()) {
+                response.setMensagem("O cliente de ID: {" + id + "} não existe na base de dados");
+                response.setCodRetorno(404);
+                return response;
+            } else {
+                repository.inverterStatusCliente(id);
+                response.getCliente().add(new ClienteDTO());
+                if (clienteEntity.get().getDesativado() == 0) {
+                    response.getCliente().get(0).setDesativado(1);
+                } else {
+                    response.getCliente().get(0).setDesativado(0);
+                }
+                response.getCliente().get(0).setNome(clienteEntity.get().getNome());
+                response.getCliente().get(0).setCpf_cnpj(clienteEntity.get().getCpf_cnpj());
+                response.getCliente().get(0).setTelefone(clienteEntity.get().getTelefone());
+                response.getCliente().get(0).setEndereco(clienteEntity.get().getEndereco());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setCodRetorno(500); // Código de erro interno do servidor
+            response.setMensagem("Erro ao inverter status do cliente: " + ex.getMessage());
+        }
+        response.setCodRetorno(200);
+        response.setMensagem("cliente reativado com sucesso");
         return response;
     }
 }

@@ -2,6 +2,7 @@ package br.com.farmacia.farmacia.controller;
 
 import br.com.farmacia.farmacia.models.ClienteDTO;
 import br.com.farmacia.farmacia.models.ClienteResponse;
+import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,6 +54,13 @@ public class ClienteController {
     @GetMapping(value = "/reativar-cliente/{id}")
     public ClienteResponse reativarCliente(@PathVariable int id) throws Exception {
         return service.reativarCliente(id);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "inverter status de clientes na base de dados", response = ClienteResponse.class)
+    @GetMapping(value = "/inverter-status-clientes/{id}")
+    public ClienteResponse inverterStatusCliente(@PathVariable int id) throws Exception {
+        return service.inverterStatusCliente(id);
     }
 
 

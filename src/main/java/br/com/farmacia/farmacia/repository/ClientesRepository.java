@@ -16,6 +16,10 @@ public interface ClientesRepository extends JpaRepository<ClientesEntity, Long> 
     @Query(value = "UPDATE clientes SET desativado = 0 WHERE id = ?", nativeQuery = true)
     void reativarCliente(int idCliente);
 
+    @Modifying
+    @Query(value = "CALL pinverterstatusclientes(?)", nativeQuery = true)
+    void inverterStatusCliente(int idCliente);
+
 }
 
 

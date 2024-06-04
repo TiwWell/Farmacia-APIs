@@ -2,10 +2,14 @@ package br.com.farmacia.farmacia.controller;
 
 import br.com.farmacia.farmacia.models.*;
 import br.com.farmacia.farmacia.service.FarmaceuticoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.util.List;
 
@@ -14,6 +18,8 @@ import java.util.List;
 @Api(description = "Endpoints para listar, adicionar, atualizar e desativar farmaceuticos de uma farmácia", tags = {"Farmaceuticos"})
 public class FarmaceuticoController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FarmaceuticoController.class);
+
     @Autowired
     private FarmaceuticoService service;
 
@@ -21,6 +27,7 @@ public class FarmaceuticoController {
     @ApiOperation(value = "Liste farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/listar-farmaceutico")
     public List<FarmaceuticoDTO> listaFarmaceuticos() throws Exception {
+        LOGGER.info("Lista todos os farmaceuticos");
 
         return service.getFarmaceuticos();
     }
@@ -29,6 +36,7 @@ public class FarmaceuticoController {
     @ApiOperation(value = "Desative farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/desativar-farmaceutico/{id}")
     public FarmaceuticoResponse desativarFarmaceutico(@PathVariable int id) throws Exception {
+        LOGGER.info("Listando farmaceticos por id: {}", id);
         return service.desativarFarmaceutico(id);
     }
 
@@ -36,6 +44,10 @@ public class FarmaceuticoController {
     @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
     public FarmaceuticoResponse adicionarFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String farmaceuticoDTOJson = objectMapper.writeValueAsString(farmaceuticoDTO);
+
+        LOGGER.info("Adicionando farmaceutico: {}", farmaceuticoDTOJson);
         return service.adicionarFarmaceutico(farmaceuticoDTO);
     }
 
@@ -44,6 +56,7 @@ public class FarmaceuticoController {
     @PutMapping(value = "/atualizar-farmaceutico")
     public FarmaceuticoResponse updateFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
         return service.updateFarmaceutico(farmaceuticoDTO);
+
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
