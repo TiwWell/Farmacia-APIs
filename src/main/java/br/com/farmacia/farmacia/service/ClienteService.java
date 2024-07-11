@@ -1,14 +1,10 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.ClientesEntity;
-import br.com.farmacia.farmacia.entity.FarmaceuticoEntity;
-import br.com.farmacia.farmacia.models.ClienteDTO;
-import br.com.farmacia.farmacia.models.ClienteResponse;
-import br.com.farmacia.farmacia.models.FarmaceuticoDTO;
-import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
+import br.com.farmacia.farmacia.models.DTOs.ClienteDTO;
+import br.com.farmacia.farmacia.models.responses.ClienteResponse;
 import br.com.farmacia.farmacia.repository.ClientesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

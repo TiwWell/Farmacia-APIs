@@ -1,6 +1,7 @@
-package br.com.farmacia.farmacia.models;
+package br.com.farmacia.farmacia.models.responses;
 
 
+import br.com.farmacia.farmacia.models.DTOs.ClienteDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

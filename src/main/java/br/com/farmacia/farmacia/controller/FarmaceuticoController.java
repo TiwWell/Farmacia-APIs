@@ -1,6 +1,7 @@
 package br.com.farmacia.farmacia.controller;
 
-import br.com.farmacia.farmacia.models.*;
+import br.com.farmacia.farmacia.models.DTOs.FarmaceuticoDTO;
+import br.com.farmacia.farmacia.models.responses.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.service.FarmaceuticoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;

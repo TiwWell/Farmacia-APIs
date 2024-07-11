@@ -1,5 +1,7 @@
-package br.com.farmacia.farmacia.models;
+package br.com.farmacia.farmacia.models.responses;
 
+
+import br.com.farmacia.farmacia.models.DTOs.RemedioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class FarmaceuticoResponse {
+public class RemedioResponse {
 
     private int codRetorno;
     private String mensagem;
-    private List<FarmaceuticoDTO> farmaceutico;
+    private List<RemedioDTO> remedio;
 }

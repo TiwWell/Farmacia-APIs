@@ -1,4 +1,4 @@
-package br.com.farmacia.farmacia.models;
+package br.com.farmacia.farmacia.models.DTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +13,6 @@ public class FarmaceuticoDTO {
     String nome;
     String cpf_cnpj;
     String crf;
-    int desativado;
+    int status;
 
 }

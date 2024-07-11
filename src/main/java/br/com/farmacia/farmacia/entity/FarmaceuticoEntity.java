@@ -23,5 +23,5 @@ public class FarmaceuticoEntity {
     private String CPF_CNPJ;
 
     @Column(name = "desativado")
-    private int desativado;
+    private int status;
 }

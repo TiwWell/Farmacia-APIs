@@ -1,7 +1,8 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.FarmaceuticoEntity;
-import br.com.farmacia.farmacia.models.*;
+import br.com.farmacia.farmacia.models.DTOs.FarmaceuticoDTO;
+import br.com.farmacia.farmacia.models.responses.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.repository.FarmaceuticoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class FarmaceuticoService {
                 farmaceutico.setNome(farmaceuticoEntity.getNome());
                 farmaceutico.setCrf(farmaceuticoEntity.getCRF());
                 farmaceutico.setCpf_cnpj(farmaceuticoEntity.getCPF_CNPJ());
-                farmaceutico.setDesativado(farmaceuticoEntity.getDesativado());
+                farmaceutico.setStatus(farmaceuticoEntity.getStatus());
                 listaFarmaceutico.add(farmaceutico);
             }
             Collections.sort(listaFarmaceutico, Comparator.comparing(FarmaceuticoDTO::getNome));
@@ -55,7 +56,7 @@ public class FarmaceuticoService {
             farmaceuticoEntity.setCRF(farmaceuticoDTO.getCrf());
             farmaceuticoEntity.setCPF_CNPJ(farmaceuticoDTO.getCpf_cnpj());
             repository.save(farmaceuticoEntity);
-            FarmaceuticoDTO farmaceutico = new FarmaceuticoDTO(farmaceuticoEntity.getId(), farmaceuticoEntity.getNome(), farmaceuticoEntity.getCPF_CNPJ(), farmaceuticoEntity.getCRF(), farmaceuticoEntity.getDesativado());
+            FarmaceuticoDTO farmaceutico = new FarmaceuticoDTO(farmaceuticoEntity.getId(), farmaceuticoEntity.getNome(), farmaceuticoEntity.getCPF_CNPJ(), farmaceuticoEntity.getCRF(), farmaceuticoEntity.getStatus());
             farmaceuticoResponse.getFarmaceutico().add(farmaceutico);
 
 
@@ -91,7 +92,7 @@ public class FarmaceuticoService {
             farmaceuticoEntity1.setNome(farmaceuticoDTO.getNome());
             farmaceuticoEntity1.setCPF_CNPJ(farmaceuticoDTO.getCpf_cnpj());
             farmaceuticoEntity1.setCRF(farmaceuticoDTO.getCrf());
-            farmaceuticoEntity1.setDesativado(farmaceuticoDTO.getDesativado());
+            farmaceuticoEntity1.setStatus(farmaceuticoDTO.getStatus());
             repository.save(farmaceuticoEntity1);
 
         } catch (Exception ex) {
@@ -149,10 +150,10 @@ public class FarmaceuticoService {
             } else {
                 repository.inverterStatusFarmaceutico(id);
                 response.getFarmaceutico().add(new FarmaceuticoDTO());
-                if (farmaceuticoEntity.get().getDesativado() == 0) {
-                    response.getFarmaceutico().get(0).setDesativado(1);
+                if (farmaceuticoEntity.get().getStatus() == 0) {
+                    response.getFarmaceutico().get(0).setStatus(1);
                 } else {
-                    response.getFarmaceutico().get(0).setDesativado(0);
+                    response.getFarmaceutico().get(0).setStatus(0);
                 }
                 response.getFarmaceutico().get(0).setCrf(farmaceuticoEntity.get().getCRF());
                 response.getFarmaceutico().get(0).setId(farmaceuticoEntity.get().getId());

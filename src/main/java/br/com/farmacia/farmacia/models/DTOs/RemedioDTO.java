@@ -1,4 +1,4 @@
-package br.com.farmacia.farmacia.models;
+package br.com.farmacia.farmacia.models.DTOs;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

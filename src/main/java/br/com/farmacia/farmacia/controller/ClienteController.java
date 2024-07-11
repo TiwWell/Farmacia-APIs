@@ -1,8 +1,7 @@
 package br.com.farmacia.farmacia.controller;
 
-import br.com.farmacia.farmacia.models.ClienteDTO;
-import br.com.farmacia.farmacia.models.ClienteResponse;
-import br.com.farmacia.farmacia.models.FarmaceuticoResponse;
+import br.com.farmacia.farmacia.models.DTOs.ClienteDTO;
+import br.com.farmacia.farmacia.models.responses.ClienteResponse;
 import br.com.farmacia.farmacia.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

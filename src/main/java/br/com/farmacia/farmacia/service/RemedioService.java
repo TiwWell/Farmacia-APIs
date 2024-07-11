@@ -1,8 +1,8 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.RemediosEntity;
-import br.com.farmacia.farmacia.models.RemedioDTO;
-import br.com.farmacia.farmacia.models.RemedioResponse;
+import br.com.farmacia.farmacia.models.DTOs.RemedioDTO;
+import br.com.farmacia.farmacia.models.responses.RemedioResponse;
 import br.com.farmacia.farmacia.repository.RemediosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
