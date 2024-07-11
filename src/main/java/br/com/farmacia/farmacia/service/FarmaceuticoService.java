@@ -16,24 +16,32 @@ public class FarmaceuticoService {
     @Autowired
     private FarmaceuticoRepository repository;
 
-    public List<FarmaceuticoDTO> getFarmaceuticos() throws Exception {
-        List<FarmaceuticoDTO> listaFarmaceutico = new ArrayList<>();
+    public FarmaceuticoResponse getFarmaceuticos() throws Exception {
+        FarmaceuticoResponse response = new FarmaceuticoResponse();
         try {
             List<FarmaceuticoEntity> listaFarmaceuticosEntity = repository.findAll();
-            for (FarmaceuticoEntity farmaceuticoEntity : listaFarmaceuticosEntity) {
-                FarmaceuticoDTO farmaceutico = new FarmaceuticoDTO();
-                farmaceutico.setId(farmaceuticoEntity.getId());
-                farmaceutico.setNome(farmaceuticoEntity.getNome());
-                farmaceutico.setCrf(farmaceuticoEntity.getCRF());
-                farmaceutico.setCpf_cnpj(farmaceuticoEntity.getCPF_CNPJ());
-                farmaceutico.setStatus(farmaceuticoEntity.getStatus());
-                listaFarmaceutico.add(farmaceutico);
+            //Se lista da tabela estiver vazia, nao entra no for e nem tenta ordenar
+            if(listaFarmaceuticosEntity.size() > 0) {
+                for (FarmaceuticoEntity farmaceuticoEntity : listaFarmaceuticosEntity) {
+                    FarmaceuticoDTO farmaceutico = new FarmaceuticoDTO();
+                    farmaceutico.setId(farmaceuticoEntity.getId());
+                    farmaceutico.setNome(farmaceuticoEntity.getNome());
+                    farmaceutico.setCrf(farmaceuticoEntity.getCRF());
+                    farmaceutico.setCpf_cnpj(farmaceuticoEntity.getCPF_CNPJ());
+                    farmaceutico.setStatus(farmaceuticoEntity.getStatus());
+                    response.getListaFarmaceuticos().add(farmaceutico);
+                }
+                //Ordena a lista de farmaceuticos alfabeticamente
+                Collections.sort(response.getListaFarmaceuticos(), Comparator.comparing(FarmaceuticoDTO::getNome));
+            }else{
+                response.setListaFarmaceuticos(new ArrayList<>());
+                response.setCodRetorno(204);
+                response.setMensagem("Não existem dados para consulta");
             }
-            Collections.sort(listaFarmaceutico, Comparator.comparing(FarmaceuticoDTO::getNome));
         } catch (Exception ex) {
             throw new Exception(ex.getCause());
         }
-        return listaFarmaceutico;
+        return response;
     }
 
     public FarmaceuticoResponse adicionarFarmaceutico(FarmaceuticoDTO farmaceuticoDTO) throws Exception {
@@ -48,7 +56,7 @@ public class FarmaceuticoService {
         }
 
         FarmaceuticoResponse farmaceuticoResponse = new FarmaceuticoResponse();
-        farmaceuticoResponse.setFarmaceutico(new ArrayList<>());
+        farmaceuticoResponse.setListaFarmaceuticos(new ArrayList<>());
         try {
             FarmaceuticoEntity farmaceuticoEntity = new FarmaceuticoEntity();
             farmaceuticoEntity.setId(farmaceuticoDTO.getId());
@@ -57,7 +65,7 @@ public class FarmaceuticoService {
             farmaceuticoEntity.setCPF_CNPJ(farmaceuticoDTO.getCpf_cnpj());
             repository.save(farmaceuticoEntity);
             FarmaceuticoDTO farmaceutico = new FarmaceuticoDTO(farmaceuticoEntity.getId(), farmaceuticoEntity.getNome(), farmaceuticoEntity.getCPF_CNPJ(), farmaceuticoEntity.getCRF(), farmaceuticoEntity.getStatus());
-            farmaceuticoResponse.getFarmaceutico().add(farmaceutico);
+            farmaceuticoResponse.getListaFarmaceuticos().add(farmaceutico);
 
 
         } catch (Exception ex) {
@@ -78,7 +86,7 @@ public class FarmaceuticoService {
         }
 
         FarmaceuticoResponse farmaceuticoResponse = new FarmaceuticoResponse();
-        farmaceuticoResponse.setFarmaceutico(new ArrayList<>());
+        farmaceuticoResponse.setListaFarmaceuticos(new ArrayList<>());
         try {
             Optional<FarmaceuticoEntity> farmaceuticoEntity = repository.findById((long) farmaceuticoDTO.getId());
             if (!farmaceuticoEntity.isPresent()) {
@@ -100,7 +108,7 @@ public class FarmaceuticoService {
         }
         farmaceuticoResponse.setCodRetorno(201);
         farmaceuticoResponse.setMensagem("Farmaceutico foi atualizado com sucesso");
-        farmaceuticoResponse.getFarmaceutico().add(farmaceuticoDTO);
+        farmaceuticoResponse.getListaFarmaceuticos().add(farmaceuticoDTO);
 
         return farmaceuticoResponse;
 
@@ -140,7 +148,7 @@ public class FarmaceuticoService {
     @Transactional
     public FarmaceuticoResponse inverterStatusFarmaceutico(int id) {
         FarmaceuticoResponse response = new FarmaceuticoResponse();
-        response.setFarmaceutico(new ArrayList<>());
+        response.setListaFarmaceuticos(new ArrayList<>());
         try {
             Optional<FarmaceuticoEntity> farmaceuticoEntity = repository.findById((long) id);
             if (!farmaceuticoEntity.isPresent()) {
@@ -149,16 +157,16 @@ public class FarmaceuticoService {
                 return response;
             } else {
                 repository.inverterStatusFarmaceutico(id);
-                response.getFarmaceutico().add(new FarmaceuticoDTO());
+                response.getListaFarmaceuticos().add(new FarmaceuticoDTO());
                 if (farmaceuticoEntity.get().getStatus() == 0) {
-                    response.getFarmaceutico().get(0).setStatus(1);
+                    response.getListaFarmaceuticos().get(0).setStatus(1);
                 } else {
-                    response.getFarmaceutico().get(0).setStatus(0);
+                    response.getListaFarmaceuticos().get(0).setStatus(0);
                 }
-                response.getFarmaceutico().get(0).setCrf(farmaceuticoEntity.get().getCRF());
-                response.getFarmaceutico().get(0).setId(farmaceuticoEntity.get().getId());
-                response.getFarmaceutico().get(0).setNome(farmaceuticoEntity.get().getNome());
-                response.getFarmaceutico().get(0).setCpf_cnpj(farmaceuticoEntity.get().getCPF_CNPJ());
+                response.getListaFarmaceuticos().get(0).setCrf(farmaceuticoEntity.get().getCRF());
+                response.getListaFarmaceuticos().get(0).setId(farmaceuticoEntity.get().getId());
+                response.getListaFarmaceuticos().get(0).setNome(farmaceuticoEntity.get().getNome());
+                response.getListaFarmaceuticos().get(0).setCpf_cnpj(farmaceuticoEntity.get().getCPF_CNPJ());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

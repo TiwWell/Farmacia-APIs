@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,17 +28,17 @@ public class FarmaceuticoController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Liste farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/listar-farmaceutico")
-    public List<FarmaceuticoDTO> listaFarmaceuticos() throws Exception {
-        LOGGER.info("Lista todos os farmaceuticos");
+    public ResponseEntity<FarmaceuticoResponse> listaFarmaceuticos() throws Exception {
+        LOGGER.info("Listando todos os farmaceuticos");
 
-        return service.getFarmaceuticos();
+        return ResponseEntity.ok(service.getFarmaceuticos());
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Desative farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/desativar-farmaceutico/{id}")
     public FarmaceuticoResponse desativarFarmaceutico(@PathVariable int id) throws Exception {
-        LOGGER.info("Listando farmaceticos por id: {}", id);
+        LOGGER.info("Desativando farmacetico por id: {}", id);
         return service.desativarFarmaceutico(id);
     }
 
@@ -56,6 +57,7 @@ public class FarmaceuticoController {
     @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @PutMapping(value = "/atualizar-farmaceutico")
     public FarmaceuticoResponse updateFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+        LOGGER.info("Atualizando farmaceutico: {}", farmaceuticoDTO);
         return service.updateFarmaceutico(farmaceuticoDTO);
 
     }
