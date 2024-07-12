@@ -19,6 +19,7 @@ public class RemedioService {
 
     public RemedioResponse getRemedio() throws Exception {
         RemedioResponse response = new RemedioResponse();
+        response.setListaRemedios(new ArrayList<>());
         try {
             List<RemediosEntity> listaRemediosEntity = repository.findAll();
             if (listaRemediosEntity.size() > 0) {
@@ -30,6 +31,7 @@ public class RemedioService {
                     remedio.setQuantidade(remediosEntity.getQuantidade());
                     remedio.setImg(remediosEntity.getImg());
                     remedio.setStatus(remediosEntity.getStatus());
+                    response.getListaRemedios().add(remedio);
                 }
                 Collections.sort(response.getListaRemedios(), Comparator.comparing(RemedioDTO::getNome));
             } else {

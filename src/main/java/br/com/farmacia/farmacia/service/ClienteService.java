@@ -17,6 +17,7 @@ public class ClienteService {
 
     public ClienteResponse getClientes() throws Exception {
         ClienteResponse response = new ClienteResponse();
+        response.setListaClientes(new ArrayList<>());
         try {
             List<ClientesEntity> listaClientesEntity = repository.findAll();
             if (listaClientesEntity.size() > 0) {
@@ -28,14 +29,14 @@ public class ClienteService {
                     cliente.setTelefone(clientesEntity.getTelefone());
                     cliente.setEndereco(clientesEntity.getEndereco());
                     cliente.setDesativado(clientesEntity.getDesativado());
+                    response.getListaClientes().add(cliente);
                 }
                 Collections.sort(response.getListaClientes(), Comparator.comparing(ClienteDTO::getNome));
-            }else{
+            } else {
                 response.setListaClientes(new ArrayList<>());
                 response.setCodRetorno(204);
                 response.setMensagem("Nào existem dados para consulta");
             }
-
         } catch (Exception ex) {
             throw new Exception(ex.getCause());
         }
