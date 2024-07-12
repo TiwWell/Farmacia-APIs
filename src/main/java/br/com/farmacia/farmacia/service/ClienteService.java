@@ -15,27 +15,33 @@ public class ClienteService {
     @Autowired
     private ClientesRepository repository;
 
-    public List<ClienteDTO> getClientes() throws Exception {
-        List<ClienteDTO> listaDeClientes = new ArrayList<>();
+    public ClienteResponse getClientes() throws Exception {
+        ClienteResponse response = new ClienteResponse();
         try {
             List<ClientesEntity> listaClientesEntity = repository.findAll();
-            for (ClientesEntity clientesEntity : listaClientesEntity) {
-                ClienteDTO cliente = new ClienteDTO();
-                cliente.setId(clientesEntity.getId());
-                cliente.setNome(clientesEntity.getNome());
-                cliente.setCpf_cnpj(clientesEntity.getCpf_cnpj());
-                cliente.setTelefone(clientesEntity.getTelefone());
-                cliente.setEndereco(clientesEntity.getEndereco());
-                cliente.setDesativado(clientesEntity.getDesativado());
-                listaDeClientes.add(cliente);
+            if (listaClientesEntity.size() > 0) {
+                for (ClientesEntity clientesEntity : listaClientesEntity) {
+                    ClienteDTO cliente = new ClienteDTO();
+                    cliente.setId(clientesEntity.getId());
+                    cliente.setNome(clientesEntity.getNome());
+                    cliente.setCpf_cnpj(clientesEntity.getCpf_cnpj());
+                    cliente.setTelefone(clientesEntity.getTelefone());
+                    cliente.setEndereco(clientesEntity.getEndereco());
+                    cliente.setDesativado(clientesEntity.getDesativado());
+                }
+                Collections.sort(response.getListaClientes(), Comparator.comparing(ClienteDTO::getNome));
+            }else{
+                response.setListaClientes(new ArrayList<>());
+                response.setCodRetorno(204);
+                response.setMensagem("Nào existem dados para consulta");
             }
-            Collections.sort(listaDeClientes, Comparator.comparing(ClienteDTO::getNome));
+
         } catch (Exception ex) {
             throw new Exception(ex.getCause());
         }
 
 
-        return listaDeClientes;
+        return response;
     }
 
     public ClienteResponse adicionarClientes(ClienteDTO clienteDTO) throws Exception {
@@ -49,7 +55,7 @@ public class ClienteService {
             throw new Exception();
         }
         ClienteResponse clienteResponse = new ClienteResponse();
-        clienteResponse.setCliente(new ArrayList<>());
+        clienteResponse.setListaClientes(new ArrayList<>());
         try {
             ClientesEntity clientesEntity = new ClientesEntity();
             clientesEntity.setId(clienteDTO.getId());
@@ -59,7 +65,7 @@ public class ClienteService {
             clientesEntity.setEndereco(clienteDTO.getEndereco());
             repository.save(clientesEntity);
             ClienteDTO cliente = new ClienteDTO(clientesEntity.getId(), clientesEntity.getNome(), clientesEntity.getCpf_cnpj(), clientesEntity.getTelefone(), clientesEntity.getEndereco(), clientesEntity.getDesativado());
-            clienteResponse.getCliente().add(cliente);
+            clienteResponse.getListaClientes().add(cliente);
 
         } catch (Exception ex) {
 
@@ -78,7 +84,7 @@ public class ClienteService {
             clienteDTO.setCpf_cnpj(clienteDTO.getCpf_cnpj().substring(0, 2) + "." + clienteDTO.getCpf_cnpj().substring(2, 5) + "." + clienteDTO.getCpf_cnpj().substring(5, 8) + "/" + clienteDTO.getCpf_cnpj().substring(8, 12) + "-" + clienteDTO.getCpf_cnpj().substring(12));
         }
         ClienteResponse clienteResponse = new ClienteResponse();
-        clienteResponse.setCliente(new ArrayList<>());
+        clienteResponse.setListaClientes(new ArrayList<>());
         try {
             Optional<ClientesEntity> clientesEntity = repository.findById((long) clienteDTO.getId());
 
@@ -101,7 +107,7 @@ public class ClienteService {
         }
         clienteResponse.setCodRetorno(201);
         clienteResponse.setMensagem("Cliente atualizado com sucesso");
-        clienteResponse.getCliente().add(clienteDTO);
+        clienteResponse.getListaClientes().add(clienteDTO);
 
         return clienteResponse;
 
@@ -140,7 +146,7 @@ public class ClienteService {
     @Transactional
     public ClienteResponse inverterStatusCliente(int id) {
         ClienteResponse response = new ClienteResponse();
-        response.setCliente(new ArrayList<>());
+        response.setListaClientes(new ArrayList<>());
         try {
             Optional<ClientesEntity> clienteEntity = repository.findById((long) id);
             if (!clienteEntity.isPresent()) {
@@ -149,16 +155,16 @@ public class ClienteService {
                 return response;
             } else {
                 repository.inverterStatusCliente(id);
-                response.getCliente().add(new ClienteDTO());
+                response.getListaClientes().add(new ClienteDTO());
                 if (clienteEntity.get().getDesativado() == 0) {
-                    response.getCliente().get(0).setDesativado(1);
+                    response.getListaClientes().get(0).setDesativado(1);
                 } else {
-                    response.getCliente().get(0).setDesativado(0);
+                    response.getListaClientes().get(0).setDesativado(0);
                 }
-                response.getCliente().get(0).setNome(clienteEntity.get().getNome());
-                response.getCliente().get(0).setCpf_cnpj(clienteEntity.get().getCpf_cnpj());
-                response.getCliente().get(0).setTelefone(clienteEntity.get().getTelefone());
-                response.getCliente().get(0).setEndereco(clienteEntity.get().getEndereco());
+                response.getListaClientes().get(0).setNome(clienteEntity.get().getNome());
+                response.getListaClientes().get(0).setCpf_cnpj(clienteEntity.get().getCpf_cnpj());
+                response.getListaClientes().get(0).setTelefone(clienteEntity.get().getTelefone());
+                response.getListaClientes().get(0).setEndereco(clienteEntity.get().getEndereco());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

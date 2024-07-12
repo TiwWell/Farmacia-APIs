@@ -23,7 +23,7 @@ public class RemediosEntity {
     @Column(name = "img")
     private String img;
 
-    @Column(name = "desativado")
-    private int desativado;
+    @Column(name = "status")
+    private int status;
 }
 

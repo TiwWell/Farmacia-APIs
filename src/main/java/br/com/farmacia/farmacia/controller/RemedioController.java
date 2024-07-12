@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
@@ -30,9 +31,9 @@ public class RemedioController {
 
     @ApiOperation(value = "Liste remedios na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/listar-remedio")
-    public List<RemedioDTO> listaRemedios() throws Exception {
+    public ResponseEntity<RemedioResponse> listaRemedios() throws Exception {
         LOGGER.info("Listando todos os remédios");
-        return service.getRemedio();
+        return ResponseEntity.ok(service.getRemedio());
     }
     @ApiOperation(value = "Desative remedios na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/desativar-remedio/{id}")
