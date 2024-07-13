@@ -18,6 +18,7 @@ public class FarmaceuticoService {
 
     public FarmaceuticoResponse getFarmaceuticos() throws Exception {
         FarmaceuticoResponse response = new FarmaceuticoResponse();
+        response.setListaFarmaceuticos(new ArrayList<>());
         try {
             List<FarmaceuticoEntity> listaFarmaceuticosEntity = repository.findAll();
             //Se lista da tabela estiver vazia, nao entra no for e nem tenta ordenar

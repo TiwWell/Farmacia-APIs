@@ -3,10 +3,12 @@ package br.com.farmacia.farmacia.controller;
 import br.com.farmacia.farmacia.models.DTOs.FarmaceuticoDTO;
 import br.com.farmacia.farmacia.models.responses.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.service.FarmaceuticoService;
+import br.com.farmacia.farmacia.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
@@ -25,12 +27,17 @@ public class FarmaceuticoController {
     @Autowired
     private FarmaceuticoService service;
 
+    private static final String GET = "GET";
+    private static final String POST = "POST";
+
+
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Liste farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/listar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> listaFarmaceuticos() throws Exception {
-        LOGGER.info("Listando todos os farmaceuticos");
-
+        Utils.logJsonEntradaSaida("", POST, FarmaceuticoController.class.getName(), "listar-farmaceutico",  "entrada");
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.getFarmaceuticos(), HttpStatus.OK);
+        Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, FarmaceuticoController.class.getName(), "listar-farmaceutico",  "saida");
         return ResponseEntity.ok(service.getFarmaceuticos());
     }
 
