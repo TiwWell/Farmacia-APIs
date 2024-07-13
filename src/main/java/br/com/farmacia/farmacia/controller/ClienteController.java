@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class ClienteController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Adicione clientes a base de dados", response = ClienteResponse.class)
     @PostMapping(value = "/adicionar-cliente")
-    public ClienteResponse adicionarClientes(@RequestBody ClienteDTO clienteDTO) throws Exception {
+    public ClienteResponse adicionarClientes(@RequestBody @Validated  ClienteDTO clienteDTO) throws Exception {
         LOGGER.info("Adicionando cliente por id: {}");
         return service.adicionarClientes(clienteDTO);
     }

@@ -6,6 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.format.annotation.NumberFormat;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -16,15 +22,20 @@ public class ClienteDTO {
     @ApiModelProperty(name = "id", notes = "Id do cliente", example = "1", position = 1)
     long id;
 
+    @NotBlank (message = "Favor inserir um nome")
     @ApiModelProperty(name = "nome", notes = "Nome do do cliente", example = "Maria Aparecida da Silva", position = 2)
     String nome;
 
-    @ApiModelProperty(name = "cpf_cnpj", notes = "CPF/CNPJ do cliente com pontuação", example = "123.401.660-55", position = 3)
+    @NotBlank (message = "Favor inserir um CPF ou CNPJ") //Alterar para CPF ou CNPJ o mais rapido possivel.
+    @ApiModelProperty(name = "cpf_cnpj", notes = "CPF/CNPJ do cliente com pontuação", example = "12340166055", position = 3)
     String cpf_cnpj;
 
-    @ApiModelProperty(name = "telefone", notes = "Telefone para contato do cliente com DDD", example = "11 988051506", position = 4)
+    @NotBlank (message = "O campo Telefone não pode ser vazio")
+    @Size(min= 10, max= 11, message = "Insira um numero de telefone valido entre 10 ou 11 digitos")
+    @ApiModelProperty(name = "telefone", notes = "Telefone para contato do cliente com DDD", example = "11988051506", position = 4)
     String telefone;
 
+    @NotBlank (message = "Favor adicionar endereço")
     @ApiModelProperty(name = "endereço", notes = "Endereço do cliente com o numero", example = "Rua das Nações Unidas, 35", position = 5)
     String endereco;
 
