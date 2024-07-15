@@ -56,7 +56,7 @@ public class RemedioController {
 
     @ApiOperation(value = "Atualize remedios na base de dados", response = ClienteResponse.class)
     @PutMapping(value = "/atualizar-remedio")
-    public RemedioResponse atualizarRemedio(@ApiParam(value = "Conjunto de dados para atualizar remedio no banco de dados") @RequestBody RemedioDTO remedioDTO) throws Exception {
+    public RemedioResponse atualizarRemedio(@ApiParam(value = "Conjunto de dados para atualizar remedio no banco de dados") @RequestBody @Validated RemedioDTO remedioDTO) throws Exception {
 
         // Converte o objeto remedioDTO para JSON
         ObjectMapper objectMapper = new ObjectMapper();

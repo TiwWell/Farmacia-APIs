@@ -36,7 +36,7 @@ public class ClienteController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Adicione clientes a base de dados", response = ClienteResponse.class)
     @PostMapping(value = "/adicionar-cliente")
-    public ClienteResponse adicionarClientes(@RequestBody @Validated  ClienteDTO clienteDTO) throws Exception {
+    public ClienteResponse adicionarClientes(@RequestBody @Validated ClienteDTO clienteDTO) throws Exception {
         LOGGER.info("Adicionando cliente por id: {}");
         return service.adicionarClientes(clienteDTO);
     }
@@ -51,7 +51,7 @@ public class ClienteController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Atualize clientes na base de dados", response = ClienteResponse.class)
     @PutMapping(value = "/atualizar-cliente")
-    public ClienteResponse updateCliente(@RequestBody ClienteDTO clienteDTO) throws Exception {
+    public ClienteResponse updateCliente(@RequestBody @Validated ClienteDTO clienteDTO) throws Exception {
         LOGGER.info("Atualizando cliente por id: {}");
         return service.updateCliente(clienteDTO);
 

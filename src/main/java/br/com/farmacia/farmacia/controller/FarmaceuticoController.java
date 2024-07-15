@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class FarmaceuticoController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
-    public FarmaceuticoResponse adicionarFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+    public FarmaceuticoResponse adicionarFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         String farmaceuticoDTOJson = objectMapper.writeValueAsString(farmaceuticoDTO);
 
@@ -63,7 +64,7 @@ public class FarmaceuticoController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @PutMapping(value = "/atualizar-farmaceutico")
-    public FarmaceuticoResponse updateFarmaceutico(@RequestBody FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+    public FarmaceuticoResponse updateFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
         LOGGER.info("Atualizando farmaceutico: {}", farmaceuticoDTO);
         return service.updateFarmaceutico(farmaceuticoDTO);
 
