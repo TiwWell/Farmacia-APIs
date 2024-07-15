@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
-import org.springframework.format.annotation.NumberFormat;
+
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -23,20 +23,20 @@ public class ClienteDTO {
     long id;
 
     @NotBlank (message = "Favor inserir um nome")
-    @ApiModelProperty(name = "nome", notes = "Nome do do cliente", example = "Maria Aparecida da Silva", position = 2)
+    @ApiModelProperty(name = "nome", notes = "Nome do do cliente", example = "Maria Aparecida da Silva",required = true, position = 2)
     String nome;
 
     @NotBlank (message = "Favor inserir um CPF ou CNPJ") //Alterar para CPF ou CNPJ o mais rapido possivel.
-    @ApiModelProperty(name = "cpf_cnpj", notes = "CPF/CNPJ do cliente com pontuação", example = "12340166055", position = 3)
+    @ApiModelProperty(name = "cpf_cnpj", notes = "CPF/CNPJ do cliente com pontuação", example = "12340166055",required = true, position = 3)
     String cpf_cnpj;
 
     @NotBlank (message = "O campo Telefone não pode ser vazio")
     @Size(min= 10, max= 11, message = "Insira um numero de telefone valido entre 10 ou 11 digitos")
-    @ApiModelProperty(name = "telefone", notes = "Telefone para contato do cliente com DDD", example = "11988051506", position = 4)
+    @ApiModelProperty(name = "telefone", notes = "Telefone para contato do cliente com DDD", example = "11988051506",required = true, position = 4)
     String telefone;
 
     @NotBlank (message = "Favor adicionar endereço")
-    @ApiModelProperty(name = "endereço", notes = "Endereço do cliente com o numero", example = "Rua das Nações Unidas, 35", position = 5)
+    @ApiModelProperty(name = "endereço", notes = "Endereço do cliente com o numero", example = "Rua das Nações Unidas, 35",required = true, position = 5)
     String endereco;
 
     @ApiModelProperty(name = "status", notes = "Status de operação | 1 - Ativado | 0 - Desativado", example = "0", position = 6)
