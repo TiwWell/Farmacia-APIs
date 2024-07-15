@@ -115,36 +115,6 @@ public class FarmaceuticoService {
 
     }
 
-    @Transactional
-    public FarmaceuticoResponse desativarFarmaceutico(int id) throws Exception {
-        FarmaceuticoResponse response = new FarmaceuticoResponse();
-        try {
-            repository.desativarFarmaceutico(id);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setCodRetorno(500);
-            response.setMensagem("Erro ao desativar o farmaceutico: " + ex.getMessage());
-        }
-        response.setCodRetorno(202);
-        response.setMensagem("Farmaceutico foi desativado com sucesso");
-        return response;
-
-    }
-
-    @Transactional
-    public FarmaceuticoResponse reativarFarmaceutico(int id) throws Exception {
-        FarmaceuticoResponse response = new FarmaceuticoResponse();
-        try {
-            repository.reativarFarmaceutico(id);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setCodRetorno(500); // Código de erro interno do servidor
-            response.setMensagem("Erro ao reativar o farmaceutico: " + ex.getMessage());
-        }
-        response.setCodRetorno(200);
-        response.setMensagem("Farmaceutico reativado com sucesso");
-        return response;
-    }
 
     @Transactional
     public FarmaceuticoResponse inverterStatusFarmaceutico(int id) {

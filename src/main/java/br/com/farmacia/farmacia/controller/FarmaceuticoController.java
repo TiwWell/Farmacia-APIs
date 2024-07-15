@@ -16,8 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/api")
 @Api(description = "Endpoints para listar, adicionar, atualizar e desativar farmaceuticos de uma farmácia", tags = {"Farmaceuticos"})
@@ -31,59 +29,55 @@ public class FarmaceuticoController {
     private static final String GET = "GET";
     private static final String POST = "POST";
 
+    private static final String PUT = "PUT";
+
 
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Liste farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/listar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> listaFarmaceuticos() throws Exception {
-        Utils.logJsonEntradaSaida("", POST, FarmaceuticoController.class.getName(), "listar-farmaceutico",  "entrada");
+        Utils.logJsonEntradaSaida("", GET, FarmaceuticoController.class.getName(), "listar-farmaceutico", "entrada");
         ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.getFarmaceuticos(), HttpStatus.OK);
-        Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, FarmaceuticoController.class.getName(), "listar-farmaceutico",  "saida");
-        return ResponseEntity.ok(service.getFarmaceuticos());
+        Utils.logJsonEntradaSaida(responseEntity.getBody(), GET, FarmaceuticoController.class.getName(), "listar-farmaceutico", "saida");
+        return responseEntity;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @ApiOperation(value = "Desative farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
-    @GetMapping(value = "/desativar-farmaceutico/{id}")
-    public FarmaceuticoResponse desativarFarmaceutico(@PathVariable int id) throws Exception {
-        LOGGER.info("Desativando farmacetico por id: {}", id);
-        return service.desativarFarmaceutico(id);
-    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
-    public FarmaceuticoResponse adicionarFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+    public ResponseEntity<FarmaceuticoResponse> adicionarFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         String farmaceuticoDTOJson = objectMapper.writeValueAsString(farmaceuticoDTO);
 
-        LOGGER.info("Adicionando farmaceutico: {}", farmaceuticoDTOJson);
-        return service.adicionarFarmaceutico(farmaceuticoDTO);
+        Utils.logJsonEntradaSaida("", POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "entrada");
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.adicionarFarmaceutico(farmaceuticoDTO), HttpStatus.OK);
+        Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "saida");
+        return responseEntity;
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @PutMapping(value = "/atualizar-farmaceutico")
-    public FarmaceuticoResponse updateFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
-        LOGGER.info("Atualizando farmaceutico: {}", farmaceuticoDTO);
-        return service.updateFarmaceutico(farmaceuticoDTO);
+    public ResponseEntity<FarmaceuticoResponse> updateFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+        Utils.logJsonEntradaSaida("", PUT, FarmaceuticoController.class.getName(), "atualizar-farmaceutico", "entrada");
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.updateFarmaceutico(farmaceuticoDTO), HttpStatus.OK);
+        Utils.logJsonEntradaSaida(responseEntity.getBody(), PUT, FarmaceuticoController.class.getName(), "listar-farmaceutico", "saida");
+        return responseEntity;
 
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @ApiOperation(value = "Reative farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
-    @GetMapping(value = "/reativar-farmaceutico/{id}")
-    public FarmaceuticoResponse reativarFarmaceutico(@PathVariable int id) throws Exception {
-        return service.reativarFarmaceutico(id);
-    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "inverter status de farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/inverter-status-farmaceutico/{id}")
-    public FarmaceuticoResponse inverterStatusFarmaceutico(@PathVariable int id) throws Exception {
-        return service.inverterStatusFarmaceutico(id);
+    public ResponseEntity<FarmaceuticoResponse> inverterStatusFarmaceutico(@PathVariable int id) throws Exception {
+        //Trasnformar ID em JSON.
+        Utils.logJsonEntradaSaida(id, GET, FarmaceuticoController.class.getName(), "inverter-status-farmaceutico",  "entrada");
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.inverterStatusFarmaceutico(id), HttpStatus.OK);
+        Utils.logJsonEntradaSaida(responseEntity.getBody(), GET, FarmaceuticoController.class.getName(), "inverter-status-farmaceutico",  "saida");
+                return responseEntity;
     }
-
 
 
 }
