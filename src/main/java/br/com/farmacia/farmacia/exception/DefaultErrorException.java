@@ -20,7 +20,7 @@ public class DefaultErrorException extends RuntimeException {
 
     public DefaultErrorException(String error, HttpStatus httpStatusError, String possivelCausa) {
         this.code = httpStatusError.value();
-        this.message = httpStatusError.toString();
+        this.message = error;
         this.errors.add(new ErroResponse(error, possivelCausa));
     }
 
