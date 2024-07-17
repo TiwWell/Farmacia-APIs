@@ -22,9 +22,6 @@ public class ExceptionResponse {
     @ApiModelProperty(name = "statusCode", notes = "Código do erro do http", example = "400", position = 2)
     private Integer statusCode;
 
-    @ApiModelProperty(name = "possivelCausa", notes = "Possível causa do erro", example = "Campos de entrada inválidos", position = 3)
-    private String possivelCausa;
-
     @ApiModelProperty(name = "erros", notes = "Lista de erros", position = 4)
     private List<ErroResponse> erros;
 
