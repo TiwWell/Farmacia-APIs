@@ -15,7 +15,7 @@ public interface RemediosRepository extends JpaRepository<RemediosEntity, Long> 
     void reativarRemedio(int idRemedio);
 
     @Modifying
-    @Query(value = "CALL pinvertestatus(?)", nativeQuery = true)
+    @Query(value = "CALL pinvertestatusremedios(?)", nativeQuery = true)
     void inverterStatusRemedio(int idRemedio);
 
 

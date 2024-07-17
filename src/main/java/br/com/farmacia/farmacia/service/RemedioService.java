@@ -148,7 +148,7 @@ public class RemedioService {
     }
 
     @Transactional
-    public RemedioResponse atualizarStatusRemedio(int id) {
+    public RemedioResponse inverterStatusRemedio(int id) {
         RemedioResponse response = new RemedioResponse();
         response.setListaRemedios(new ArrayList<>());
 

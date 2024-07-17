@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 @RestController
@@ -21,14 +19,11 @@ import org.slf4j.LoggerFactory;
 @Api(description = "Endpoints para listar, adicionar, atualizar e desativar farmaceuticos de uma farmácia", tags = {"Farmaceuticos"})
 public class FarmaceuticoController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FarmaceuticoController.class);
-
     @Autowired
     private FarmaceuticoService service;
 
     private static final String GET = "GET";
     private static final String POST = "POST";
-
     private static final String PUT = "PUT";
 
 
@@ -47,10 +42,8 @@ public class FarmaceuticoController {
     @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> adicionarFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String farmaceuticoDTOJson = objectMapper.writeValueAsString(farmaceuticoDTO);
 
-        Utils.logJsonEntradaSaida("", POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "entrada");
+        Utils.logJsonEntradaSaida(farmaceuticoDTO, POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "entrada");
         ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.adicionarFarmaceutico(farmaceuticoDTO), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "saida");
         return responseEntity;
@@ -59,8 +52,8 @@ public class FarmaceuticoController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @PutMapping(value = "/atualizar-farmaceutico")
-    public ResponseEntity<FarmaceuticoResponse> updateFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
-        Utils.logJsonEntradaSaida("", PUT, FarmaceuticoController.class.getName(), "atualizar-farmaceutico", "entrada");
+    public ResponseEntity<FarmaceuticoResponse> atualizarFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+        Utils.logJsonEntradaSaida(farmaceuticoDTO, PUT, FarmaceuticoController.class.getName(), "atualizar-farmaceutico", "entrada");
         ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.updateFarmaceutico(farmaceuticoDTO), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), PUT, FarmaceuticoController.class.getName(), "listar-farmaceutico", "saida");
         return responseEntity;
