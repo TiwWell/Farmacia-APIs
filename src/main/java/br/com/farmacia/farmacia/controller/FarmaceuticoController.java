@@ -1,10 +1,9 @@
 package br.com.farmacia.farmacia.controller;
 
-import br.com.farmacia.farmacia.models.DTOs.FarmaceuticoDTO;
+import br.com.farmacia.farmacia.models.requests.FarmaceuticoRequest;
 import br.com.farmacia.farmacia.models.responses.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.service.FarmaceuticoService;
 import br.com.farmacia.farmacia.utils.Utils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +40,10 @@ public class FarmaceuticoController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
-    public ResponseEntity<FarmaceuticoResponse> adicionarFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
+    public ResponseEntity<FarmaceuticoResponse> adicionarFarmaceutico(@RequestBody @Validated FarmaceuticoRequest farmaceuticoRequest) throws Exception {
 
-        Utils.logJsonEntradaSaida(farmaceuticoDTO, POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "entrada");
-        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.adicionarFarmaceutico(farmaceuticoDTO), HttpStatus.OK);
+        Utils.logJsonEntradaSaida(farmaceuticoRequest, POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "entrada");
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.adicionarFarmaceutico(farmaceuticoRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "saida");
         return responseEntity;
     }
@@ -52,9 +51,9 @@ public class FarmaceuticoController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @PutMapping(value = "/atualizar-farmaceutico")
-    public ResponseEntity<FarmaceuticoResponse> atualizarFarmaceutico(@RequestBody @Validated FarmaceuticoDTO farmaceuticoDTO) throws Exception {
-        Utils.logJsonEntradaSaida(farmaceuticoDTO, PUT, FarmaceuticoController.class.getName(), "atualizar-farmaceutico", "entrada");
-        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.updateFarmaceutico(farmaceuticoDTO), HttpStatus.OK);
+    public ResponseEntity<FarmaceuticoResponse> atualizarFarmaceutico(@RequestBody @Validated FarmaceuticoRequest farmaceuticoRequest) throws Exception {
+        Utils.logJsonEntradaSaida(farmaceuticoRequest, PUT, FarmaceuticoController.class.getName(), "atualizar-farmaceutico", "entrada");
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.updateFarmaceutico(farmaceuticoRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), PUT, FarmaceuticoController.class.getName(), "listar-farmaceutico", "saida");
         return responseEntity;
 

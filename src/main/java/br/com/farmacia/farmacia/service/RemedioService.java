@@ -1,11 +1,13 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.RemediosEntity;
-import br.com.farmacia.farmacia.models.DTOs.RemedioDTO;
-import br.com.farmacia.farmacia.models.responses.FarmaceuticoResponse;
+import br.com.farmacia.farmacia.exception.DefaultErrorException;
+import br.com.farmacia.farmacia.models.requests.RemedioRequest;
 import br.com.farmacia.farmacia.models.responses.RemedioResponse;
 import br.com.farmacia.farmacia.repository.RemediosRepository;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,60 +22,43 @@ public class RemedioService {
     public RemedioResponse getRemedio() throws Exception {
         RemedioResponse response = new RemedioResponse();
         response.setListaRemedios(new ArrayList<>());
+        List<RemediosEntity> listaRemediosEntity;
         try {
-            List<RemediosEntity> listaRemediosEntity = repository.findAll();
-            if (listaRemediosEntity.size() > 0) {
-                for (RemediosEntity remediosEntity : listaRemediosEntity) {
-                    RemedioDTO remedio = new RemedioDTO();
-                    remedio.setId(remediosEntity.getId());
-                    remedio.setNome(remediosEntity.getNome());
-                    remedio.setValor(remediosEntity.getValor());
-                    remedio.setQuantidade(remediosEntity.getQuantidade());
-                    remedio.setImg(remediosEntity.getImg());
-                    remedio.setStatus(remediosEntity.getStatus());
-                    response.getListaRemedios().add(remedio);
-                }
-                Collections.sort(response.getListaRemedios(), Comparator.comparing(RemedioDTO::getNome));
-            } else {
-                response.setListaRemedios(new ArrayList<>());
-                response.setCodRetorno(204);
-                response.setMensagem("Não existem dados para consulta");
-            }
+            listaRemediosEntity = repository.findAll();
         } catch (Exception ex) {
-            throw new Exception(ex.getCause());
-
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao executar a listagem de remedios no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
-
+        if (listaRemediosEntity.size() > 0) {
+            for (RemediosEntity remediosEntity : listaRemediosEntity) {
+                RemedioRequest remedio = new RemedioRequest();
+                remedio.setId(remediosEntity.getId());
+                remedio.setNome(remediosEntity.getNome());
+                remedio.setValor(remediosEntity.getValor());
+                remedio.setQuantidade(remediosEntity.getQuantidade());
+                remedio.setImg(remediosEntity.getImg());
+                remedio.setStatus(remediosEntity.getStatus());
+                response.getListaRemedios().add(remedio);
+            }
+            Collections.sort(response.getListaRemedios(), Comparator.comparing(RemedioRequest::getNome));
+        } else {
+            throw new DefaultErrorException("Não existem dados para essa consulta", HttpStatus.OK, "Falta de itens na tabela");
+        }
         return response;
     }
 
-    public String deletarRemedios(Long id) throws Exception {
-        try {
-            Optional<RemediosEntity> remediosEntity = repository.findById(id);
-            if (!remediosEntity.isPresent()) {
-                return "Remedio ID does not exist in the database";
-
-            }
-            repository.deleteById(id);
-        } catch (Exception ex) {
-            throw new Exception(ex.getCause());
-
-        }
-        return "Deleted with sucessfull!!";
-
-    }
-
-    public RemedioResponse adicionarRemedio(RemedioDTO remedioDTO) throws Exception {
+    public RemedioResponse adicionarRemedio(RemedioRequest remedioRequest) throws Exception {
         RemedioResponse remedioResponse = new RemedioResponse();
         remedioResponse.setListaRemedios(new ArrayList<>());
         try {
             RemediosEntity remedioentity = new RemediosEntity();
-            remedioentity.setNome(remedioDTO.getNome());
-            remedioentity.setValor(remedioDTO.getValor());
-            remedioentity.setQuantidade(remedioDTO.getQuantidade());
-            remedioentity.setImg(remedioDTO.getImg());
+            remedioentity.setNome(remedioRequest.getNome());
+            remedioentity.setValor(remedioRequest.getValor());
+            remedioentity.setQuantidade(remedioRequest.getQuantidade());
+            remedioentity.setImg(remedioRequest.getImg());
             repository.save(remedioentity);
-            RemedioDTO remedio = new RemedioDTO(remedioentity.getId(), remedioentity.getNome(), remedioentity.getValor(), remedioentity.getQuantidade(), remedioentity.getImg(), remedioentity.getStatus());
+            RemedioRequest remedio = new RemedioRequest(remedioentity.getId(), remedioentity.getNome(), remedioentity.getValor(), remedioentity.getQuantidade(), remedioentity.getImg(), remedioentity.getStatus());
             remedioResponse.getListaRemedios().add(remedio);
 
 
@@ -86,23 +71,23 @@ public class RemedioService {
 
     }
 
-    public RemedioResponse atualizarRemedio(RemedioDTO remedioDTO) throws Exception {
+    public RemedioResponse atualizarRemedio(RemedioRequest remedioRequest) throws Exception {
         RemedioResponse remedioResponse = new RemedioResponse();
         remedioResponse.setListaRemedios(new ArrayList<>());
         try {
-            Optional<RemediosEntity> remediosEntity = repository.findById((long) remedioDTO.getId());
+            Optional<RemediosEntity> remediosEntity = repository.findById((long) remedioRequest.getId());
             if (!remediosEntity.isPresent()) {
                 remedioResponse.setMensagem("This remedio does not exists into the database");
                 remedioResponse.setCodRetorno(404);
                 return remedioResponse;
             }
             RemediosEntity remediosEntity1 = new RemediosEntity();
-            remediosEntity1.setId(remedioDTO.getId());
-            remediosEntity1.setNome(remedioDTO.getNome());
-            remediosEntity1.setQuantidade(remedioDTO.getQuantidade());
-            remediosEntity1.setValor(remedioDTO.getValor());
-            remediosEntity1.setImg(remedioDTO.getImg());
-            remediosEntity1.setStatus(remedioDTO.getStatus());
+            remediosEntity1.setId(remedioRequest.getId());
+            remediosEntity1.setNome(remedioRequest.getNome());
+            remediosEntity1.setQuantidade(remedioRequest.getQuantidade());
+            remediosEntity1.setValor(remedioRequest.getValor());
+            remediosEntity1.setImg(remedioRequest.getImg());
+            remediosEntity1.setStatus(remedioRequest.getStatus());
             repository.save(remediosEntity1);
 
         } catch (Exception ex) {
@@ -110,7 +95,7 @@ public class RemedioService {
         }
         remedioResponse.setCodRetorno(201);
         remedioResponse.setMensagem("Remedio has been updated");
-        remedioResponse.getListaRemedios().add(remedioDTO);
+        remedioResponse.getListaRemedios().add(remedioRequest);
 
         return remedioResponse;
     }
@@ -160,7 +145,7 @@ public class RemedioService {
                 return response;
             } else {
                 repository.inverterStatusRemedio(id);
-                response.getListaRemedios().add(new RemedioDTO());
+                response.getListaRemedios().add(new RemedioRequest());
                 if (remediosEntity.get().getStatus() == 0) {
                     response.getListaRemedios().get(0).setStatus(1);
                 } else {

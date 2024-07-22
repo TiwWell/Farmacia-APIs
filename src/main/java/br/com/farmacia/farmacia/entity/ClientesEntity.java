@@ -26,6 +26,6 @@ public class ClientesEntity {
     @Column(name = "endereco")
     private String endereco;
 
-    @Column(name = "desativado")
-    private int desativado;
+    @Column(name = "status")
+    private int status;
 }

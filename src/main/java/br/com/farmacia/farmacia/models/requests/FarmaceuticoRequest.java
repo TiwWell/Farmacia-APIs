@@ -1,4 +1,4 @@
-package br.com.farmacia.farmacia.models.DTOs;
+package br.com.farmacia.farmacia.models.requests;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "FarmaceuticoDTO", description = "Objeto de entrada do end-point: listar-farmaceutico")
-public class FarmaceuticoDTO {
+public class FarmaceuticoRequest {
 
     @ApiModelProperty(name = "id", notes = "Id do farmaceutico", example = "0", required = false, position = 1)
     long id;

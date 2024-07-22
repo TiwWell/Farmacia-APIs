@@ -1,6 +1,6 @@
 package br.com.farmacia.farmacia.controller;
 
-import br.com.farmacia.farmacia.models.DTOs.ClienteDTO;
+import br.com.farmacia.farmacia.models.requests.ClienteRequest;
 import br.com.farmacia.farmacia.models.responses.ClienteResponse;
 import br.com.farmacia.farmacia.service.ClienteService;
 import br.com.farmacia.farmacia.utils.Utils;
@@ -41,9 +41,9 @@ public class ClienteController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Adicione clientes a base de dados", response = ClienteResponse.class)
     @PostMapping(value = "/adicionar-cliente")
-    public ResponseEntity adicionarClientes(@RequestBody @Validated ClienteDTO clienteDTO) throws Exception {
-        Utils.logJsonEntradaSaida(clienteDTO, POST, ClienteController.class.getName(), "adicionar-cliente", "entrada");
-        ResponseEntity<ClienteResponse> responseEntity = new ResponseEntity<>(service.getClientes(), HttpStatus.OK);
+    public ResponseEntity adicionarClientes(@RequestBody @Validated ClienteRequest clienteRequest) throws Exception {
+        Utils.logJsonEntradaSaida(clienteRequest, POST, ClienteController.class.getName(), "adicionar-cliente", "entrada");
+        ResponseEntity<ClienteResponse> responseEntity = new ResponseEntity<>(service.adicionarClientes(clienteRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, ClienteController.class.getName(), "adicionar-cliente", "saida");
 
         return responseEntity;
@@ -52,9 +52,9 @@ public class ClienteController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Atualize clientes na base de dados", response = ClienteResponse.class)
     @PutMapping(value = "/atualizar-cliente")
-    public ResponseEntity<ClienteResponse> updateCliente(@RequestBody @Validated ClienteDTO clienteDTO) throws Exception {
-        Utils.logJsonEntradaSaida(clienteDTO, PUT, ClienteController.class.getName(), "atualizar-cliente", "entrada");
-        ResponseEntity<ClienteResponse> responseEntity = new ResponseEntity<>(service.updateCliente(clienteDTO), HttpStatus.OK);
+    public ResponseEntity<ClienteResponse> updateCliente(@RequestBody @Validated ClienteRequest clienteRequest) throws Exception {
+        Utils.logJsonEntradaSaida(clienteRequest, PUT, ClienteController.class.getName(), "atualizar-cliente", "entrada");
+        ResponseEntity<ClienteResponse> responseEntity = new ResponseEntity<>(service.updateCliente(clienteRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), PUT, FarmaceuticoController.class.getName(), "atualizar-cliente", "saida");
         return responseEntity;
 

@@ -1,10 +1,9 @@
 package br.com.farmacia.farmacia.controller;
 
-import br.com.farmacia.farmacia.models.DTOs.RemedioDTO;
+import br.com.farmacia.farmacia.models.requests.RemedioRequest;
 import br.com.farmacia.farmacia.models.responses.RemedioResponse;
 import br.com.farmacia.farmacia.service.RemedioService;
 import br.com.farmacia.farmacia.utils.Utils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -38,19 +37,19 @@ public class RemedioController {
     }
     @ApiOperation(value = "Adicione remedios a base de dados", response = RemedioResponse.class)
     @PostMapping(value = "/adicionar-remedio")
-    public ResponseEntity<RemedioResponse> adicionarRemedio(@ApiParam(value = "Conjunto de dados para adicionar remedio no banco de dados") @RequestBody @Validated RemedioDTO remedioDTO) throws Exception {
-        Utils.logJsonEntradaSaida(remedioDTO, POST, RemedioController.class.getName(), "adicionar-remedio", "entrada");
-        ResponseEntity<RemedioResponse> responseEntity = new ResponseEntity<>(service.adicionarRemedio(remedioDTO), HttpStatus.OK);
+    public ResponseEntity<RemedioResponse> adicionarRemedio(@ApiParam(value = "Conjunto de dados para adicionar remedio no banco de dados") @RequestBody @Validated RemedioRequest remedioRequest) throws Exception {
+        Utils.logJsonEntradaSaida(remedioRequest, POST, RemedioController.class.getName(), "adicionar-remedio", "entrada");
+        ResponseEntity<RemedioResponse> responseEntity = new ResponseEntity<>(service.adicionarRemedio(remedioRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, RemedioController.class.getName(), "adicionar-remedio", "saida");
         return responseEntity;
     }
 
     @ApiOperation(value = "Atualize remedios na base de dados", response = RemedioResponse.class)
     @PutMapping(value = "/atualizar-remedio")
-    public ResponseEntity<RemedioResponse> atualizarRemedio(@ApiParam(value = "Conjunto de dados para atualizar remedio no banco de dados") @RequestBody @Validated RemedioDTO remedioDTO) throws Exception {
+    public ResponseEntity<RemedioResponse> atualizarRemedio(@ApiParam(value = "Conjunto de dados para atualizar remedio no banco de dados") @RequestBody @Validated RemedioRequest remedioRequest) throws Exception {
 
-        Utils.logJsonEntradaSaida(remedioDTO, PUT, RemedioController.class.getName(), "atualizar-remedio", "entrada");
-        ResponseEntity<RemedioResponse> responseEntity = new ResponseEntity<>(service.atualizarRemedio(remedioDTO), HttpStatus.OK);
+        Utils.logJsonEntradaSaida(remedioRequest, PUT, RemedioController.class.getName(), "atualizar-remedio", "entrada");
+        ResponseEntity<RemedioResponse> responseEntity = new ResponseEntity<>(service.atualizarRemedio(remedioRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), PUT, RemedioController.class.getName(), "atualizar-remedio", "saida");
         return responseEntity;
     }

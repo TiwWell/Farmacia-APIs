@@ -1,10 +1,13 @@
 package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.ClientesEntity;
-import br.com.farmacia.farmacia.models.DTOs.ClienteDTO;
+import br.com.farmacia.farmacia.exception.DefaultErrorException;
+import br.com.farmacia.farmacia.models.requests.ClienteRequest;
 import br.com.farmacia.farmacia.models.responses.ClienteResponse;
 import br.com.farmacia.farmacia.repository.ClientesRepository;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,57 +21,60 @@ public class ClienteService {
     public ClienteResponse getClientes() throws Exception {
         ClienteResponse response = new ClienteResponse();
         response.setListaClientes(new ArrayList<>());
+        List<ClientesEntity> listaClientesEntity;
         try {
-            List<ClientesEntity> listaClientesEntity = repository.findAll();
-            if (listaClientesEntity.size() > 0) {
-                for (ClientesEntity clientesEntity : listaClientesEntity) {
-                    ClienteDTO cliente = new ClienteDTO();
-                    cliente.setId(clientesEntity.getId());
-                    cliente.setNome(clientesEntity.getNome());
-                    cliente.setCpf_cnpj(clientesEntity.getCpf_cnpj());
-                    cliente.setTelefone(clientesEntity.getTelefone());
-                    cliente.setEndereco(clientesEntity.getEndereco());
-                    cliente.setDesativado(clientesEntity.getDesativado());
-                    response.getListaClientes().add(cliente);
-                }
-                Collections.sort(response.getListaClientes(), Comparator.comparing(ClienteDTO::getNome));
-            } else {
-                response.setListaClientes(new ArrayList<>());
-                response.setCodRetorno(204);
-                response.setMensagem("Nào existem dados para consulta");
-            }
+            listaClientesEntity = repository.findAll();
         } catch (Exception ex) {
-            throw new Exception(ex.getCause());
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao executar a listagem de clientes no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
-
+        if (listaClientesEntity.size() > 0) {
+            for (ClientesEntity clientesEntity : listaClientesEntity) {
+                ClienteRequest cliente = new ClienteRequest();
+                cliente.setId(clientesEntity.getId());
+                cliente.setNome(clientesEntity.getNome());
+                cliente.setCpf_cnpj(clientesEntity.getCpf_cnpj());
+                cliente.setTelefone(clientesEntity.getTelefone());
+                cliente.setEndereco(clientesEntity.getEndereco());
+                cliente.setStatus(clientesEntity.getStatus());
+                response.getListaClientes().add(cliente);
+            }
+            Collections.sort(response.getListaClientes(), Comparator.comparing(ClienteRequest::getNome));
+        } else {
+            throw new DefaultErrorException("Não existem dados para essa consulta", HttpStatus.OK, "Falta de itens na tabela");
+        }
 
         return response;
     }
 
-    public ClienteResponse adicionarClientes(ClienteDTO clienteDTO) throws Exception {
+    public ClienteResponse adicionarClientes(ClienteRequest clienteRequest) throws Exception {
+        clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
+        if (clienteRequest.getCpf_cnpj().length() == 11) {
+            clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().substring(0, 3) + "." + clienteRequest.getCpf_cnpj().substring(3, 6) + "." + clienteRequest.getCpf_cnpj().substring(6, 9) + "-" + clienteRequest.getCpf_cnpj().substring(9));
 
-        if (clienteDTO.getCpf_cnpj().length() == 11) {
-            clienteDTO.setCpf_cnpj(clienteDTO.getCpf_cnpj().substring(0, 3) + "." + clienteDTO.getCpf_cnpj().substring(3, 6) + "." + clienteDTO.getCpf_cnpj().substring(6, 9) + "-" + clienteDTO.getCpf_cnpj().substring(9));
-
-        } else if (clienteDTO.getCpf_cnpj().length() == 14) {
-            clienteDTO.setCpf_cnpj(clienteDTO.getCpf_cnpj().substring(0, 2) + "." + clienteDTO.getCpf_cnpj().substring(2, 5) + "." + clienteDTO.getCpf_cnpj().substring(5, 8) + "/" + clienteDTO.getCpf_cnpj().substring(8, 12) + "-" + clienteDTO.getCpf_cnpj().substring(12));
+        } else if (clienteRequest.getCpf_cnpj().length() == 14) {
+            clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().substring(0, 2) + "." + clienteRequest.getCpf_cnpj().substring(2, 5) + "." + clienteRequest.getCpf_cnpj().substring(5, 8) + "/" + clienteRequest.getCpf_cnpj().substring(8, 12) + "-" + clienteRequest.getCpf_cnpj().substring(12));
         } else {
-            throw new Exception();
+            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
         }
         ClienteResponse clienteResponse = new ClienteResponse();
         clienteResponse.setListaClientes(new ArrayList<>());
         try {
             ClientesEntity clientesEntity = new ClientesEntity();
-            clientesEntity.setId(clienteDTO.getId());
-            clientesEntity.setNome(clienteDTO.getNome());
-            clientesEntity.setCpf_cnpj(clienteDTO.getCpf_cnpj());
-            clientesEntity.setTelefone(clienteDTO.getTelefone());
-            clientesEntity.setEndereco(clienteDTO.getEndereco());
+            clientesEntity.setId(clienteRequest.getId());
+            clientesEntity.setNome(clienteRequest.getNome());
+            clientesEntity.setCpf_cnpj(clienteRequest.getCpf_cnpj());
+            clientesEntity.setTelefone(clienteRequest.getTelefone());
+            clientesEntity.setEndereco(clienteRequest.getEndereco());
             repository.save(clientesEntity);
-            ClienteDTO cliente = new ClienteDTO(clientesEntity.getId(), clientesEntity.getNome(), clientesEntity.getCpf_cnpj(), clientesEntity.getTelefone(), clientesEntity.getEndereco(), clientesEntity.getDesativado());
+            ClienteRequest cliente = new ClienteRequest(clientesEntity.getId(), clientesEntity.getNome(), clientesEntity.getCpf_cnpj(), clientesEntity.getTelefone(), clientesEntity.getEndereco(), clientesEntity.getStatus());
             clienteResponse.getListaClientes().add(cliente);
 
         } catch (Exception ex) {
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao adicionar cliente no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
 
         }
         clienteResponse.setMensagem("Cliente criado com sucesso");
@@ -77,17 +83,19 @@ public class ClienteService {
 
     }
 
-    public ClienteResponse updateCliente(ClienteDTO clienteDTO) throws Exception {
-
-        if (clienteDTO.getCpf_cnpj().length() == 11) {
-            clienteDTO.setCpf_cnpj(clienteDTO.getCpf_cnpj().substring(0, 3) + "." + clienteDTO.getCpf_cnpj().substring(3, 6) + "." + clienteDTO.getCpf_cnpj().substring(6, 9) + "-" + clienteDTO.getCpf_cnpj().substring(9));
-        } else if (clienteDTO.getCpf_cnpj().length() == 14) {
-            clienteDTO.setCpf_cnpj(clienteDTO.getCpf_cnpj().substring(0, 2) + "." + clienteDTO.getCpf_cnpj().substring(2, 5) + "." + clienteDTO.getCpf_cnpj().substring(5, 8) + "/" + clienteDTO.getCpf_cnpj().substring(8, 12) + "-" + clienteDTO.getCpf_cnpj().substring(12));
+    public ClienteResponse updateCliente(ClienteRequest clienteRequest) throws Exception {
+        clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
+        if (clienteRequest.getCpf_cnpj().length() == 11) {
+            clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().substring(0, 3) + "." + clienteRequest.getCpf_cnpj().substring(3, 6) + "." + clienteRequest.getCpf_cnpj().substring(6, 9) + "-" + clienteRequest.getCpf_cnpj().substring(9));
+        } else if (clienteRequest.getCpf_cnpj().length() == 14) {
+            clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().substring(0, 2) + "." + clienteRequest.getCpf_cnpj().substring(2, 5) + "." + clienteRequest.getCpf_cnpj().substring(5, 8) + "/" + clienteRequest.getCpf_cnpj().substring(8, 12) + "-" + clienteRequest.getCpf_cnpj().substring(12));
+        } else {
+            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
         }
         ClienteResponse clienteResponse = new ClienteResponse();
         clienteResponse.setListaClientes(new ArrayList<>());
         try {
-            Optional<ClientesEntity> clientesEntity = repository.findById((long) clienteDTO.getId());
+            Optional<ClientesEntity> clientesEntity = repository.findById((long) clienteRequest.getId());
 
             if (!clientesEntity.isPresent()) {
                 clienteResponse.setMensagem("Esse cliente não existe no banco de dados");
@@ -95,53 +103,25 @@ public class ClienteService {
                 return clienteResponse;
             }
             ClientesEntity clientesEntity1 = new ClientesEntity();
-            clientesEntity1.setId(clienteDTO.getId());
-            clientesEntity1.setNome(clienteDTO.getNome());
-            clientesEntity1.setCpf_cnpj(clienteDTO.getCpf_cnpj());
-            clientesEntity1.setTelefone(clienteDTO.getTelefone());
-            clientesEntity1.setEndereco(clienteDTO.getEndereco());
-            clientesEntity1.setDesativado(clienteDTO.getDesativado());
+            clientesEntity1.setId(clienteRequest.getId());
+            clientesEntity1.setNome(clienteRequest.getNome());
+            clientesEntity1.setCpf_cnpj(clienteRequest.getCpf_cnpj());
+            clientesEntity1.setTelefone(clienteRequest.getTelefone());
+            clientesEntity1.setEndereco(clienteRequest.getEndereco());
+            clientesEntity1.setStatus(clienteRequest.getStatus());
             repository.save(clientesEntity1);
 
         } catch (Exception ex) {
-            throw new Exception(ex.getCause());
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao atualizar cliente no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
         clienteResponse.setCodRetorno(201);
         clienteResponse.setMensagem("Cliente atualizado com sucesso");
-        clienteResponse.getListaClientes().add(clienteDTO);
+        clienteResponse.getListaClientes().add(clienteRequest);
 
         return clienteResponse;
 
-    }
-
-    @Transactional
-    public ClienteResponse desativarCliente(int id) throws Exception {
-        ClienteResponse response = new ClienteResponse();
-        try {
-            repository.desativarCliente(id);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setCodRetorno(500); // Código de erro interno do servidor
-            response.setMensagem("Erro ao desativar o cliente: " + ex.getMessage());
-        }
-        response.setCodRetorno(200);
-        response.setMensagem("Cliente desativado com sucesso");
-        return response;
-    }
-
-    @Transactional
-    public ClienteResponse reativarCliente(int id) throws Exception {
-        ClienteResponse response = new ClienteResponse();
-        try {
-            repository.reativarCliente(id);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setCodRetorno(500); // Código de erro interno do servidor
-            response.setMensagem("Erro ao reativar o cliente: " + ex.getMessage());
-        }
-        response.setCodRetorno(200);
-        response.setMensagem("Cliente reativado com sucesso");
-        return response;
     }
 
     @Transactional
@@ -156,11 +136,11 @@ public class ClienteService {
                 return response;
             } else {
                 repository.inverterStatusCliente(id);
-                response.getListaClientes().add(new ClienteDTO());
-                if (clienteEntity.get().getDesativado() == 0) {
-                    response.getListaClientes().get(0).setDesativado(1);
+                response.getListaClientes().add(new ClienteRequest());
+                if (clienteEntity.get().getStatus() == 0) {
+                    response.getListaClientes().get(0).setStatus(1);
                 } else {
-                    response.getListaClientes().get(0).setDesativado(0);
+                    response.getListaClientes().get(0).setStatus(0);
                 }
                 response.getListaClientes().get(0).setNome(clienteEntity.get().getNome());
                 response.getListaClientes().get(0).setCpf_cnpj(clienteEntity.get().getCpf_cnpj());

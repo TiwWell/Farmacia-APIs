@@ -1,6 +1,6 @@
 package br.com.farmacia.farmacia.models.responses;
 
-import br.com.farmacia.farmacia.models.DTOs.FarmaceuticoDTO;
+import br.com.farmacia.farmacia.models.requests.FarmaceuticoRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,5 +23,5 @@ public class FarmaceuticoResponse {
     private String mensagem;
 
     @ApiModelProperty(name = "listaFarmaceuticos", notes = "Lista de farmaceuticos", position = 3)
-    private List<FarmaceuticoDTO> listaFarmaceuticos;
+    private List<FarmaceuticoRequest> listaFarmaceuticos;
 }

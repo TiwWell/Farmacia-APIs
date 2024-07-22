@@ -1,4 +1,4 @@
-package br.com.farmacia.farmacia.models.DTOs;
+package br.com.farmacia.farmacia.models.requests;
 
 
 import io.swagger.annotations.ApiModel;
@@ -6,8 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CNPJ;
-import org.hibernate.validator.constraints.br.CPF;
 
 
 import javax.validation.constraints.NotBlank;
@@ -17,7 +15,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "ClienteDTO", description = "Objeto de entrada do end-point: listar-cliente")
-public class ClienteDTO {
+public class ClienteRequest {
 
     @ApiModelProperty(name = "id", notes = "Id do cliente", example = "1", position = 1)
     long id;
@@ -40,6 +38,6 @@ public class ClienteDTO {
     String endereco;
 
     @ApiModelProperty(name = "status", notes = "Status de operação | 1 - Ativado | 0 - Desativado", example = "0", position = 6)
-    int desativado;
+    int status;
 
 }
