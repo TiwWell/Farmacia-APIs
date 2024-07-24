@@ -48,88 +48,47 @@ public class RemedioService {
         return response;
     }
 
-    public RemedioResponse adicionarRemedio(RemedioRequest remedioRequest) throws Exception {
+    public RemedioResponse adicionarRemedio(RemedioRequest remedioRequest) {
+        try {
+            repository.save(new RemediosEntity(remedioRequest.getNome(), remedioRequest.getValor(), remedioRequest.getQuantidade(), remedioRequest.getImg()));
+        } catch (Exception ex) {
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao adicionar o remedio no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
+        }
+
         RemedioResponse remedioResponse = new RemedioResponse();
         remedioResponse.setListaRemedios(new ArrayList<>());
-        try {
-            RemediosEntity remedioentity = new RemediosEntity();
-            remedioentity.setNome(remedioRequest.getNome());
-            remedioentity.setValor(remedioRequest.getValor());
-            remedioentity.setQuantidade(remedioRequest.getQuantidade());
-            remedioentity.setImg(remedioRequest.getImg());
-            repository.save(remedioentity);
-            RemedioRequest remedio = new RemedioRequest(remedioentity.getId(), remedioentity.getNome(), remedioentity.getValor(), remedioentity.getQuantidade(), remedioentity.getImg(), remedioentity.getStatus());
-            remedioResponse.getListaRemedios().add(remedio);
+        remedioResponse.getListaRemedios().add(remedioRequest);
 
-
-        } catch (Exception ex) {
-            throw new Exception(ex.getCause());
-        }
         remedioResponse.setMensagem("Remédio created sucessfully");
         remedioResponse.setCodRetorno(201);
         return remedioResponse;
 
     }
 
+
     public RemedioResponse atualizarRemedio(RemedioRequest remedioRequest) throws Exception {
-        RemedioResponse remedioResponse = new RemedioResponse();
-        remedioResponse.setListaRemedios(new ArrayList<>());
         try {
             Optional<RemediosEntity> remediosEntity = repository.findById((long) remedioRequest.getId());
             if (!remediosEntity.isPresent()) {
-                remedioResponse.setMensagem("This remedio does not exists into the database");
-                remedioResponse.setCodRetorno(404);
-                return remedioResponse;
+                throw new DefaultErrorException("o remedio de ID: {" + remedioRequest.getId() + "} não existe na base de dados", HttpStatus.BAD_REQUEST, "Informar um ID Válido");
             }
-            RemediosEntity remediosEntity1 = new RemediosEntity();
-            remediosEntity1.setId(remedioRequest.getId());
-            remediosEntity1.setNome(remedioRequest.getNome());
-            remediosEntity1.setQuantidade(remedioRequest.getQuantidade());
-            remediosEntity1.setValor(remedioRequest.getValor());
-            remediosEntity1.setImg(remedioRequest.getImg());
-            remediosEntity1.setStatus(remedioRequest.getStatus());
-            repository.save(remediosEntity1);
+            repository.save(new RemediosEntity(remedioRequest.getId(), remedioRequest.getNome(), remedioRequest.getValor(), remedioRequest.getQuantidade(), remedioRequest.getImg(), remedioRequest.getStatus()));
 
         } catch (Exception ex) {
-            throw new Exception(ex.getCause());
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao atualizar o remedio no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
+        RemedioResponse remedioResponse = new RemedioResponse();
+        remedioResponse.setListaRemedios(new ArrayList<>());
+
         remedioResponse.setCodRetorno(201);
         remedioResponse.setMensagem("Remedio has been updated");
         remedioResponse.getListaRemedios().add(remedioRequest);
 
         return remedioResponse;
-    }
-
-
-    @Transactional
-    public RemedioResponse desativarRemedio(int id) {
-        RemedioResponse response = new RemedioResponse();
-        try {
-            repository.desativarRemedio(id);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setCodRetorno(500);
-            response.setMensagem("Erro ao desativar o remedio: " + ex.getMessage());
-        }
-        response.setCodRetorno(202);
-        response.setMensagem("remedio foi desativado com sucesso");
-        return response;
-
-    }
-
-    @Transactional
-    public RemedioResponse reativarRemedio(int id) {
-        RemedioResponse response = new RemedioResponse();
-        try {
-            repository.reativarRemedio(id);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setCodRetorno(500); // Código de erro interno do servidor
-            response.setMensagem("Erro ao reativar o remedio: " + ex.getMessage());
-        }
-        response.setCodRetorno(200);
-        response.setMensagem("Remedio reativado com sucesso");
-        return response;
     }
 
     @Transactional
@@ -140,9 +99,7 @@ public class RemedioService {
         try {
             Optional<RemediosEntity> remediosEntity = repository.findById((long) id);
             if (!remediosEntity.isPresent()) {
-                response.setMensagem("O remedio de ID: {" + id + "} não existe na base de dados");
-                response.setCodRetorno(404);
-                return response;
+                throw new DefaultErrorException("O remedio de ID: {" + id + " não existe na base de dados} ", HttpStatus.BAD_REQUEST, "Informar um ID Válido");
             } else {
                 repository.inverterStatusRemedio(id);
                 response.getListaRemedios().add(new RemedioRequest());
@@ -158,9 +115,9 @@ public class RemedioService {
                 response.getListaRemedios().get(0).setQuantidade(remediosEntity.get().getQuantidade());
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
-            response.setCodRetorno(500); // Código de erro interno do servidor
-            response.setMensagem("Erro ao inverter status do remedio: " + ex.getMessage());
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao atualizar o status do remedio no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
         response.setCodRetorno(200);
         response.setMensagem("Remedio reativado com sucesso");

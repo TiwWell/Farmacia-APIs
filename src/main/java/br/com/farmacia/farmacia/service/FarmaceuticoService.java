@@ -50,6 +50,7 @@ public class FarmaceuticoService {
     }
 
     public FarmaceuticoResponse adicionarFarmaceutico(FarmaceuticoRequest farmaceuticoRequest) throws Exception {
+        farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
 
         if (farmaceuticoRequest.getCpf_cnpj().length() == 11) {
             // É um CPF, extraia os números em partes
@@ -57,60 +58,54 @@ public class FarmaceuticoService {
         } else if (farmaceuticoRequest.getCpf_cnpj().length() == 14) {
             // É um CNPJ, extraia os números em partes
             farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().substring(0, 2) + "." + farmaceuticoRequest.getCpf_cnpj().substring(2, 5) + "." + farmaceuticoRequest.getCpf_cnpj().substring(5, 8) + "/" + farmaceuticoRequest.getCpf_cnpj().substring(8, 12) + "-" + farmaceuticoRequest.getCpf_cnpj().substring(12));
-
+        } else {
+            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
         }
 
-        FarmaceuticoResponse farmaceuticoResponse = new FarmaceuticoResponse();
-        farmaceuticoResponse.setListaFarmaceuticos(new ArrayList<>());
         try {
-            FarmaceuticoEntity farmaceuticoEntity = new FarmaceuticoEntity();
-            farmaceuticoEntity.setId(farmaceuticoRequest.getId());
-            farmaceuticoEntity.setNome(farmaceuticoRequest.getNome());
-            farmaceuticoEntity.setCRF(farmaceuticoRequest.getCrf());
-            farmaceuticoEntity.setCPF_CNPJ(farmaceuticoRequest.getCpf_cnpj());
-            repository.save(farmaceuticoEntity);
-            FarmaceuticoRequest farmaceutico = new FarmaceuticoRequest(farmaceuticoEntity.getId(), farmaceuticoEntity.getNome(), farmaceuticoEntity.getCPF_CNPJ(), farmaceuticoEntity.getCRF(), farmaceuticoEntity.getStatus());
-            farmaceuticoResponse.getListaFarmaceuticos().add(farmaceutico);
-
+            repository.save(new FarmaceuticoEntity(farmaceuticoRequest.getId(),farmaceuticoRequest.getNome(), farmaceuticoRequest.getCrf(),farmaceuticoRequest.getCpf_cnpj(), farmaceuticoRequest.getStatus()));
 
         } catch (Exception ex) {
-            throw new Exception(ex.getCause());
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao adicionar farmaceutico no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
+        FarmaceuticoResponse farmaceuticoResponse = new FarmaceuticoResponse();
+        farmaceuticoResponse.setListaFarmaceuticos(new ArrayList<>());
+
+        farmaceuticoResponse.getListaFarmaceuticos().add(farmaceuticoRequest);
+
         farmaceuticoResponse.setMensagem("Farmaceutico criado com sucesso");
         farmaceuticoResponse.setCodRetorno(201);
         return farmaceuticoResponse;
     }
 
     public FarmaceuticoResponse updateFarmaceutico(FarmaceuticoRequest farmaceuticoRequest) throws Exception {
-
+        farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
 
         if (farmaceuticoRequest.getCpf_cnpj().length() == 11) {
             farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().substring(0, 3) + "." + farmaceuticoRequest.getCpf_cnpj().substring(3, 6) + "." + farmaceuticoRequest.getCpf_cnpj().substring(6, 9) + "-" + farmaceuticoRequest.getCpf_cnpj().substring(9));
         } else if (farmaceuticoRequest.getCpf_cnpj().length() == 14) {
             farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().substring(0, 2) + "." + farmaceuticoRequest.getCpf_cnpj().substring(2, 5) + "." + farmaceuticoRequest.getCpf_cnpj().substring(5, 8) + "/" + farmaceuticoRequest.getCpf_cnpj().substring(8, 12) + "-" + farmaceuticoRequest.getCpf_cnpj().substring(12));
+        } else {
+            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
         }
 
-        FarmaceuticoResponse farmaceuticoResponse = new FarmaceuticoResponse();
-        farmaceuticoResponse.setListaFarmaceuticos(new ArrayList<>());
         try {
             Optional<FarmaceuticoEntity> farmaceuticoEntity = repository.findById((long) farmaceuticoRequest.getId());
             if (!farmaceuticoEntity.isPresent()) {
-                farmaceuticoResponse.setMensagem("Esse farmaceutico não existe no banco de dados");
-                farmaceuticoResponse.setCodRetorno(404);
-                return farmaceuticoResponse;
-
+                throw new DefaultErrorException("o farmaceutico de ID: {" + farmaceuticoRequest.getId() + "} não existe na base de dados", HttpStatus.BAD_REQUEST, "");
             }
-            FarmaceuticoEntity farmaceuticoEntity1 = new FarmaceuticoEntity();
-            farmaceuticoEntity1.setId(farmaceuticoRequest.getId());
-            farmaceuticoEntity1.setNome(farmaceuticoRequest.getNome());
-            farmaceuticoEntity1.setCPF_CNPJ(farmaceuticoRequest.getCpf_cnpj());
-            farmaceuticoEntity1.setCRF(farmaceuticoRequest.getCrf());
-            farmaceuticoEntity1.setStatus(farmaceuticoRequest.getStatus());
-            repository.save(farmaceuticoEntity1);
+            repository.save(new FarmaceuticoEntity(farmaceuticoRequest.getId(), farmaceuticoRequest.getNome(), farmaceuticoRequest.getCrf(), farmaceuticoRequest.getCpf_cnpj(), farmaceuticoRequest.getStatus()));
 
         } catch (Exception ex) {
-            throw new Exception(ex.getCause());
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
+            throw new DefaultErrorException("Erro ao atualizar farmaceutico no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
+        FarmaceuticoResponse farmaceuticoResponse = new FarmaceuticoResponse();
+        farmaceuticoResponse.setListaFarmaceuticos(new ArrayList<>());
+
         farmaceuticoResponse.setCodRetorno(201);
         farmaceuticoResponse.setMensagem("Farmaceutico foi atualizado com sucesso");
         farmaceuticoResponse.getListaFarmaceuticos().add(farmaceuticoRequest);

@@ -25,7 +25,7 @@ public class ClienteRequest {
     String nome;
 
     @NotBlank (message = "Favor inserir um CPF ou CNPJ") //Alterar para CPF ou CNPJ o mais rapido possivel.
-    @ApiModelProperty(name = "cpf_cnpj", notes = "CPF/CNPJ do cliente com pontuação", example = "12340166055",required = true, position = 3)
+    @ApiModelProperty(name = "cpf_cnpj", notes = "CPF/CNPJ do cliente com pontuação", example = "123.401.660-55",required = true, position = 3)
     String cpf_cnpj;
 
     @NotBlank (message = "O campo Telefone não pode ser vazio")

@@ -1,12 +1,19 @@
 package br.com.farmacia.farmacia.entity;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "clientes", schema = "public")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+
+
 public class ClientesEntity {
 
     @Id
@@ -28,4 +35,14 @@ public class ClientesEntity {
 
     @Column(name = "status")
     private int status;
+
+    public ClientesEntity(String nome, String cpfCnpj, String telefone, String endereco, int status) {
+
+        this.nome = nome;
+        this.cpf_cnpj = cpfCnpj;
+        this.telefone = telefone;
+        this.endereco = endereco;
+        this.status = status;
+    }
+
 }
