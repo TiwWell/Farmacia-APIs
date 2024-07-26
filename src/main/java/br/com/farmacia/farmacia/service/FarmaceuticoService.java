@@ -19,7 +19,7 @@ public class FarmaceuticoService {
     @Autowired
     private FarmaceuticoRepository repository;
 
-    public FarmaceuticoResponse getFarmaceuticos() throws Exception {
+    public FarmaceuticoResponse listarFarmaceuticos() throws Exception {
         FarmaceuticoResponse response = new FarmaceuticoResponse();
         response.setListaFarmaceuticos(new ArrayList<>());
         List<FarmaceuticoEntity> listaFarmaceuticosEntity;

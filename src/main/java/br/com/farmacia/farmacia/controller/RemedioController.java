@@ -31,7 +31,7 @@ public class RemedioController {
     @GetMapping(value = "/listar-remedio")
     public ResponseEntity<RemedioResponse> listaRemedios() throws Exception {
         Utils.logJsonEntradaSaida("", GET, RemedioController.class.getName(), "listar-remedio", "entrada");
-        ResponseEntity<RemedioResponse> responseEntity = new ResponseEntity<>(service.getRemedio(), HttpStatus.OK);
+        ResponseEntity<RemedioResponse> responseEntity = new ResponseEntity<>(service.listarRemedios(), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), GET, RemedioController.class.getName(), "listar-remedio", "saida");
         return responseEntity;
     }

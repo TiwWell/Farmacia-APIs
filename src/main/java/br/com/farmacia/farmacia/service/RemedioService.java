@@ -19,7 +19,7 @@ public class RemedioService {
     private RemediosRepository repository;
 
 
-    public RemedioResponse getRemedio() throws Exception {
+    public RemedioResponse listarRemedios() throws Exception {
         RemedioResponse response = new RemedioResponse();
         response.setListaRemedios(new ArrayList<>());
         List<RemediosEntity> listaRemediosEntity;
@@ -31,6 +31,7 @@ public class RemedioService {
             throw new DefaultErrorException("Erro ao executar a listagem de remedios no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
         if (listaRemediosEntity.size() > 0) {
+            response.setCodRetorno(200);
             for (RemediosEntity remediosEntity : listaRemediosEntity) {
                 RemedioRequest remedio = new RemedioRequest();
                 remedio.setId(remediosEntity.getId());

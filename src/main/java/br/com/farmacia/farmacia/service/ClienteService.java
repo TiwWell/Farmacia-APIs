@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.ws.rs.client.Client;
 import java.util.*;
 
 @Service
@@ -19,7 +18,7 @@ public class ClienteService {
     @Autowired
     private ClientesRepository repository;
 
-    public ClienteResponse getClientes() throws Exception {
+    public ClienteResponse listarClientes() throws Exception {
         ClienteResponse response = new ClienteResponse();
         response.setListaClientes(new ArrayList<>());
         List<ClientesEntity> listaClientesEntity;

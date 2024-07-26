@@ -31,7 +31,7 @@ public class FarmaceuticoController {
     @GetMapping(value = "/listar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> listaFarmaceuticos() throws Exception {
         Utils.logJsonEntradaSaida("", GET, FarmaceuticoController.class.getName(), "listar-farmaceutico", "entrada");
-        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.getFarmaceuticos(), HttpStatus.OK);
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.listarFarmaceuticos(), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), GET, FarmaceuticoController.class.getName(), "listar-farmaceutico", "saida");
         return responseEntity;
     }

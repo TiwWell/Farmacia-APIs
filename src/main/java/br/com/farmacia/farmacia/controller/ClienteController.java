@@ -31,7 +31,7 @@ public class ClienteController {
     @GetMapping(value = "/lista-cliente")
     public ResponseEntity<ClienteResponse> listaClientes() throws Exception {
         Utils.logJsonEntradaSaida("", GET, ClienteController.class.getName(), "lista-cliente", "entrada");
-        ResponseEntity<ClienteResponse> responseEntity = new ResponseEntity<>(service.getClientes(), HttpStatus.OK);
+        ResponseEntity<ClienteResponse> responseEntity = new ResponseEntity<>(service.listarClientes(), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), GET, ClienteController.class.getName(), "lista-cliente", "saida");
 
         return responseEntity;
