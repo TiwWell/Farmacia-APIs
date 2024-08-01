@@ -44,7 +44,7 @@ public class ClienteService {
         } else {
             throw new DefaultErrorException("Não existem dados para essa consulta", HttpStatus.OK, "Falta de itens na tabela");
         }
-
+        response.setCodRetorno(200);
         return response;
     }
 
@@ -58,7 +58,12 @@ public class ClienteService {
         } else {
             throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
         }
-        try {
+        clienteRequest.setTelefone(clienteRequest.getTelefone().replaceAll("[^\\d]", ""));
+        if (clienteRequest.getTelefone().length() != 10 && clienteRequest.getTelefone().length() != 11) {
+            throw new DefaultErrorException("Formatação do telefone incorreta, exemplo de telefone (11) 965223522", HttpStatus.BAD_REQUEST, "");
+
+        }
+            try {
             repository.save(new ClientesEntity(clienteRequest.getId(), clienteRequest.getNome(), clienteRequest.getCpf_cnpj(), clienteRequest.getTelefone(), clienteRequest.getEndereco(), clienteRequest.getStatus()));
         } catch (Exception ex) {
             Throwable rootCause = ExceptionUtils.getRootCause(ex);

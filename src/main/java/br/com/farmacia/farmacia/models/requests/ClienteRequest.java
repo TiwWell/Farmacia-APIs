@@ -29,7 +29,7 @@ public class ClienteRequest {
     String cpf_cnpj;
 
     @NotBlank (message = "O campo Telefone não pode ser vazio")
-    @Size(min= 10, max= 11, message = "Insira um numero de telefone valido entre 10 ou 11 digitos")
+
     @ApiModelProperty(name = "telefone", notes = "Telefone para contato do cliente com DDD", example = "11988051506",required = true, position = 4)
     String telefone;
 
