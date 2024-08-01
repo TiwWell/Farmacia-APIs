@@ -33,7 +33,7 @@ public class RemedioRequest {
     int quantidade;
 
 //    @NotBlank (message = "Favor inserir um link da imagem do item")
-    @ApiModelProperty(name = "img", notes = "Imagem do remedio", example = "URL da Imagem", position = 5)
+    @ApiModelProperty(name = "img", notes = "Imagem do remedio", example = "", position = 5)
     String img;
 
     @ApiModelProperty(name = "status", notes = "Status de operação | 1 - Ativado | 0 - Desativado", required = false, example = "0", position = 6)

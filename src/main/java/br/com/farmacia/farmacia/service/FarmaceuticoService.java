@@ -46,6 +46,7 @@ public class FarmaceuticoService {
         } else {
             throw new DefaultErrorException("Não existem dados para essa consulta", HttpStatus.OK, "Falta de itens na tabela");
         }
+        response.setCodRetorno(200);
         return response;
     }
 
