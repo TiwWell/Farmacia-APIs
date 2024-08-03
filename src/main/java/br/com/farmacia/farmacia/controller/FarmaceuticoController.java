@@ -53,7 +53,7 @@ public class FarmaceuticoController {
     @PutMapping(value = "/atualizar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> atualizarFarmaceutico(@RequestBody @Validated FarmaceuticoRequest farmaceuticoRequest) throws Exception {
         Utils.logJsonEntradaSaida(farmaceuticoRequest, PUT, FarmaceuticoController.class.getName(), "atualizar-farmaceutico", "entrada");
-        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.updateFarmaceutico(farmaceuticoRequest), HttpStatus.OK);
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.atualizarFarmaceutico(farmaceuticoRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), PUT, FarmaceuticoController.class.getName(), "listar-farmaceutico", "saida");
         return responseEntity;
 

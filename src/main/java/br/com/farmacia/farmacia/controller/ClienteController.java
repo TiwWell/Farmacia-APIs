@@ -54,7 +54,7 @@ public class ClienteController {
     @PutMapping(value = "/atualizar-cliente")
     public ResponseEntity<ClienteResponse> updateCliente(@RequestBody @Validated ClienteRequest clienteRequest) throws Exception {
         Utils.logJsonEntradaSaida(clienteRequest, PUT, ClienteController.class.getName(), "atualizar-cliente", "entrada");
-        ResponseEntity<ClienteResponse> responseEntity = new ResponseEntity<>(service.updateCliente(clienteRequest), HttpStatus.OK);
+        ResponseEntity<ClienteResponse> responseEntity = new ResponseEntity<>(service.atualizarCliente(clienteRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), PUT, FarmaceuticoController.class.getName(), "atualizar-cliente", "saida");
         return responseEntity;
 

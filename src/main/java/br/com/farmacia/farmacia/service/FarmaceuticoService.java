@@ -81,7 +81,7 @@ public class FarmaceuticoService {
         return farmaceuticoResponse;
     }
 
-    public FarmaceuticoResponse updateFarmaceutico(FarmaceuticoRequest farmaceuticoRequest) throws Exception {
+    public FarmaceuticoResponse atualizarFarmaceutico(FarmaceuticoRequest farmaceuticoRequest) throws Exception {
         farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
 
         if (farmaceuticoRequest.getCpf_cnpj().length() == 11) {

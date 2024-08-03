@@ -5,6 +5,7 @@ import br.com.farmacia.farmacia.exception.DefaultErrorException;
 import br.com.farmacia.farmacia.models.requests.ClienteRequest;
 import br.com.farmacia.farmacia.models.responses.ClienteResponse;
 import br.com.farmacia.farmacia.repository.ClientesRepository;
+import br.com.farmacia.farmacia.utils.Utils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class ClienteService {
     @Autowired
     private ClientesRepository repository;
 
-    public ClienteResponse listarClientes() throws Exception {
+    public ClienteResponse listarClientes() {
         ClienteResponse response = new ClienteResponse();
         response.setListaClientes(new ArrayList<>());
         List<ClientesEntity> listaClientesEntity;
@@ -48,20 +49,12 @@ public class ClienteService {
         return response;
     }
 
-    public ClienteResponse adicionarClientes(ClienteRequest clienteRequest) throws Exception {
-        clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
-        if (clienteRequest.getCpf_cnpj().length() == 11) {
-            clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().substring(0, 3) + "." + clienteRequest.getCpf_cnpj().substring(3, 6) + "." + clienteRequest.getCpf_cnpj().substring(6, 9) + "-" + clienteRequest.getCpf_cnpj().substring(9));
+    public ClienteResponse adicionarClientes(ClienteRequest clienteRequest) {
+        validarCpfCnpj(clienteRequest);
 
-        } else if (clienteRequest.getCpf_cnpj().length() == 14) {
-            clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().substring(0, 2) + "." + clienteRequest.getCpf_cnpj().substring(2, 5) + "." + clienteRequest.getCpf_cnpj().substring(5, 8) + "/" + clienteRequest.getCpf_cnpj().substring(8, 12) + "-" + clienteRequest.getCpf_cnpj().substring(12));
-        } else {
-            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
-        }
         clienteRequest.setTelefone(clienteRequest.getTelefone().replaceAll("[^\\d]", ""));
         if (clienteRequest.getTelefone().length() != 10 && clienteRequest.getTelefone().length() != 11) {
             throw new DefaultErrorException("Formatação do telefone incorreta, exemplo de telefone (11) 965223522", HttpStatus.BAD_REQUEST, "");
-
         }
             try {
             repository.save(new ClientesEntity(clienteRequest.getId(), clienteRequest.getNome(), clienteRequest.getCpf_cnpj(), clienteRequest.getTelefone(), clienteRequest.getEndereco(), clienteRequest.getStatus()));
@@ -78,16 +71,16 @@ public class ClienteService {
         clienteResponse.setMensagem("Cliente criado com sucesso");
         clienteResponse.setCodRetorno(201);
         return clienteResponse;
+
     }
 
-    public ClienteResponse updateCliente(ClienteRequest clienteRequest) throws Exception {
-        clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
-        if (clienteRequest.getCpf_cnpj().length() == 11) {
-            clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().substring(0, 3) + "." + clienteRequest.getCpf_cnpj().substring(3, 6) + "." + clienteRequest.getCpf_cnpj().substring(6, 9) + "-" + clienteRequest.getCpf_cnpj().substring(9));
-        } else if (clienteRequest.getCpf_cnpj().length() == 14) {
-            clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().substring(0, 2) + "." + clienteRequest.getCpf_cnpj().substring(2, 5) + "." + clienteRequest.getCpf_cnpj().substring(5, 8) + "/" + clienteRequest.getCpf_cnpj().substring(8, 12) + "-" + clienteRequest.getCpf_cnpj().substring(12));
-        } else {
-            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
+
+    public ClienteResponse atualizarCliente(ClienteRequest clienteRequest) {
+        validarCpfCnpj(clienteRequest);
+
+        clienteRequest.setTelefone(clienteRequest.getTelefone().replaceAll("[^\\d]", ""));
+        if (clienteRequest.getTelefone().length() != 10 && clienteRequest.getTelefone().length() != 11) {
+            throw new DefaultErrorException("Formatação do telefone incorreta, exemplo de telefone (11) 965223522", HttpStatus.BAD_REQUEST, "");
         }
         try {
             Optional<ClientesEntity> clientesEntity = repository.findById((long) clienteRequest.getId());
@@ -113,7 +106,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteResponse inverterStatusCliente(int id) throws Exception {
+    public ClienteResponse inverterStatusCliente(int id) {
         ClienteResponse response = new ClienteResponse();
         response.setListaClientes(new ArrayList<>());
         try {
@@ -142,6 +135,22 @@ public class ClienteService {
         response.setMensagem("cliente reativado com sucesso");
         return response;
     }
+
+    private static void validarCpfCnpj(ClienteRequest clienteRequest) {
+        clienteRequest.setCpf_cnpj(clienteRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
+        if (clienteRequest.getCpf_cnpj().length() == 11) {
+            if(!Utils.isValidCPF(clienteRequest.getCpf_cnpj())){
+                throw new DefaultErrorException("CPF inválido, favor inserir um CPF válido, exemplo de CPF 22233344405", HttpStatus.BAD_REQUEST, "O cálculo númerico do CPF inserido não é válido");
+            }
+        } else if (clienteRequest.getCpf_cnpj().length() == 14) {
+            if(!Utils.isValidCNPJ(clienteRequest.getCpf_cnpj())){
+                throw new DefaultErrorException("CNPJ inválido, favor inserir um CNPJ válido, exemplo de CNPJ 33253085000179", HttpStatus.BAD_REQUEST, "O cálculo númerico do CNPJ inserido não é válido");
+            }
+        } else {
+            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 33253085000179", HttpStatus.BAD_REQUEST, "");
+        }
+    }
+
 }
 
 

@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @ApiModel(value = "ClienteDTO", description = "Objeto de entrada do end-point: listar-cliente")
 public class ClienteRequest {
 
-    @ApiModelProperty(name = "id", notes = "Id do cliente", example = "1", position = 1)
+    @ApiModelProperty(name = "id", notes = "Id do cliente", position = 1)
     long id;
 
     @NotBlank (message = "Favor inserir um nome")
