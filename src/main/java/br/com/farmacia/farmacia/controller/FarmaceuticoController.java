@@ -1,5 +1,6 @@
 package br.com.farmacia.farmacia.controller;
 
+import br.com.farmacia.farmacia.models.requests.AdicionarFarmaceuticoRequest;
 import br.com.farmacia.farmacia.models.requests.FarmaceuticoRequest;
 import br.com.farmacia.farmacia.models.responses.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.service.FarmaceuticoService;
@@ -40,10 +41,10 @@ public class FarmaceuticoController {
     @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
-    public ResponseEntity<FarmaceuticoResponse> adicionarFarmaceutico(@RequestBody @Validated FarmaceuticoRequest farmaceuticoRequest) throws Exception {
+    public ResponseEntity<FarmaceuticoResponse> adicionarFarmaceutico(@RequestBody @Validated AdicionarFarmaceuticoRequest adicionarFarmaceuticoRequest) throws Exception {
 
-        Utils.logJsonEntradaSaida(farmaceuticoRequest, POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "entrada");
-        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.adicionarFarmaceutico(farmaceuticoRequest), HttpStatus.OK);
+        Utils.logJsonEntradaSaida(adicionarFarmaceuticoRequest, POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "entrada");
+        ResponseEntity<FarmaceuticoResponse> responseEntity = new ResponseEntity<>(service.adicionarFarmaceutico(adicionarFarmaceuticoRequest), HttpStatus.OK);
         Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, FarmaceuticoController.class.getName(), "adicionar-farmaceutico", "saida");
         return responseEntity;
     }

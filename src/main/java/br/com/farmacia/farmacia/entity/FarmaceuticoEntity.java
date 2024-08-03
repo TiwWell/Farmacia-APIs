@@ -29,6 +29,12 @@ public class FarmaceuticoEntity {
     @Column(name = "status")
     private int status;
 
+    public FarmaceuticoEntity(String nome, String crf, String cpfCnpj, int status) {
+        this.nome = nome;
+        this.CRF = crf;
+        this.CPF_CNPJ = cpfCnpj;
+        this.status = status;
+    }
     public FarmaceuticoEntity(long id, String nome, String crf, String cpfCnpj, int status) {
         this.id = id;
         this.nome = nome;

@@ -2,9 +2,12 @@ package br.com.farmacia.farmacia.service;
 
 import br.com.farmacia.farmacia.entity.FarmaceuticoEntity;
 import br.com.farmacia.farmacia.exception.DefaultErrorException;
+import br.com.farmacia.farmacia.models.requests.AdicionarFarmaceuticoRequest;
+import br.com.farmacia.farmacia.models.requests.ClienteRequest;
 import br.com.farmacia.farmacia.models.requests.FarmaceuticoRequest;
 import br.com.farmacia.farmacia.models.responses.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.repository.FarmaceuticoRepository;
+import br.com.farmacia.farmacia.utils.Utils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,21 +53,11 @@ public class FarmaceuticoService {
         return response;
     }
 
-    public FarmaceuticoResponse adicionarFarmaceutico(FarmaceuticoRequest farmaceuticoRequest) throws Exception {
-        farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
-
-        if (farmaceuticoRequest.getCpf_cnpj().length() == 11) {
-            // É um CPF, extraia os números em partes
-            farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().substring(0, 3) + "." + farmaceuticoRequest.getCpf_cnpj().substring(3, 6) + "." + farmaceuticoRequest.getCpf_cnpj().substring(6, 9) + "-" + farmaceuticoRequest.getCpf_cnpj().substring(9));
-        } else if (farmaceuticoRequest.getCpf_cnpj().length() == 14) {
-            // É um CNPJ, extraia os números em partes
-            farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().substring(0, 2) + "." + farmaceuticoRequest.getCpf_cnpj().substring(2, 5) + "." + farmaceuticoRequest.getCpf_cnpj().substring(5, 8) + "/" + farmaceuticoRequest.getCpf_cnpj().substring(8, 12) + "-" + farmaceuticoRequest.getCpf_cnpj().substring(12));
-        } else {
-            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
-        }
+    public FarmaceuticoResponse adicionarFarmaceutico(AdicionarFarmaceuticoRequest adicionarFarmaceuticoRequest) {
+        adicionarFarmaceuticoRequest.setCpf_cnpj(validarCpfCnpj(adicionarFarmaceuticoRequest.getCpf_cnpj()));
 
         try {
-            repository.save(new FarmaceuticoEntity(farmaceuticoRequest.getId(),farmaceuticoRequest.getNome(), farmaceuticoRequest.getCrf(),farmaceuticoRequest.getCpf_cnpj(), farmaceuticoRequest.getStatus()));
+            repository.save(new FarmaceuticoEntity(adicionarFarmaceuticoRequest.getNome(), adicionarFarmaceuticoRequest.getCrf(), adicionarFarmaceuticoRequest.getCpf_cnpj(), adicionarFarmaceuticoRequest.getStatus()));
 
         } catch (Exception ex) {
             Throwable rootCause = ExceptionUtils.getRootCause(ex);
@@ -74,24 +67,13 @@ public class FarmaceuticoService {
         FarmaceuticoResponse farmaceuticoResponse = new FarmaceuticoResponse();
         farmaceuticoResponse.setListaFarmaceuticos(new ArrayList<>());
 
-        farmaceuticoResponse.getListaFarmaceuticos().add(farmaceuticoRequest);
-
         farmaceuticoResponse.setMensagem("Farmaceutico criado com sucesso");
         farmaceuticoResponse.setCodRetorno(201);
         return farmaceuticoResponse;
     }
 
-    public FarmaceuticoResponse atualizarFarmaceutico(FarmaceuticoRequest farmaceuticoRequest) throws Exception {
-        farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
-
-        if (farmaceuticoRequest.getCpf_cnpj().length() == 11) {
-            farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().substring(0, 3) + "." + farmaceuticoRequest.getCpf_cnpj().substring(3, 6) + "." + farmaceuticoRequest.getCpf_cnpj().substring(6, 9) + "-" + farmaceuticoRequest.getCpf_cnpj().substring(9));
-        } else if (farmaceuticoRequest.getCpf_cnpj().length() == 14) {
-            farmaceuticoRequest.setCpf_cnpj(farmaceuticoRequest.getCpf_cnpj().substring(0, 2) + "." + farmaceuticoRequest.getCpf_cnpj().substring(2, 5) + "." + farmaceuticoRequest.getCpf_cnpj().substring(5, 8) + "/" + farmaceuticoRequest.getCpf_cnpj().substring(8, 12) + "-" + farmaceuticoRequest.getCpf_cnpj().substring(12));
-        } else {
-            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 14327288000118", HttpStatus.BAD_REQUEST, "");
-        }
-
+    public FarmaceuticoResponse atualizarFarmaceutico(FarmaceuticoRequest farmaceuticoRequest) {
+        farmaceuticoRequest.setCpf_cnpj(validarCpfCnpj(farmaceuticoRequest.getCpf_cnpj()));
         try {
             Optional<FarmaceuticoEntity> farmaceuticoEntity = repository.findById((long) farmaceuticoRequest.getId());
             if (!farmaceuticoEntity.isPresent()) {
@@ -149,5 +131,21 @@ public class FarmaceuticoService {
         return response;
 
 
+    }
+
+    private static String validarCpfCnpj(String cpfCnpjString) {
+        cpfCnpjString = cpfCnpjString.replaceAll("[^\\d]", "");
+        if (cpfCnpjString.length() == 11) {
+            if (!Utils.isValidCPF(cpfCnpjString)) {
+                throw new DefaultErrorException("CPF inválido, favor inserir um CPF válido, exemplo de CPF 22233344405", HttpStatus.BAD_REQUEST, "O cálculo númerico do CPF inserido não é válido");
+            }
+        } else if (cpfCnpjString.length() == 14) {
+            if (!Utils.isValidCNPJ(cpfCnpjString)) {
+                throw new DefaultErrorException("CNPJ inválido, favor inserir um CNPJ válido, exemplo de CNPJ 33253085000179", HttpStatus.BAD_REQUEST, "O cálculo númerico do CNPJ inserido não é válido");
+            }
+        } else {
+            throw new DefaultErrorException("Formatação do CPF ou CNPJ incorreto, exemplo de CPF 22233344405 | exemplo de CNPJ 33253085000179", HttpStatus.BAD_REQUEST, "");
+        }
+        return cpfCnpjString;
     }
 }
