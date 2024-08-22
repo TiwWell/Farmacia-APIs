@@ -10,9 +10,9 @@ spring:
       matching-strategy: ant_path_matcher
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/Farmacia
-    username: sa
-    password: 123456
+    url: jdbc:postgresql://${database_url}
+    username: ${database_username}
+    password: ${database_password}
   jpa:
     hibernate:
       type: trace
@@ -21,6 +21,8 @@ spring:
   sql:
     init:
       mode: always
+  config:
+        import: optional:file:variables.env[.properties]
 logging:
   level:
     org.hibernate.SQL: DEBUG
