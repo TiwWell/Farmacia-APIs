@@ -54,7 +54,7 @@ public class RemedioController {
         return responseEntity;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "inverter status de remedios na base de dados", response = RemedioResponse.class)
     @GetMapping(value = "/inverter-status-remedio/{id}")
     public ResponseEntity<RemedioResponse> inverterStatusRemedio(@PathVariable int id) throws Exception {
