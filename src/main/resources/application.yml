@@ -23,7 +23,10 @@ spring:
       mode: always
   config:
         import: optional:file:variables.env[.properties]
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type: TRACE
+
+server:
+  port: 5000
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type: TRACE
