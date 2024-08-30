@@ -49,7 +49,7 @@ public class FarmaceuticoController {
         return responseEntity;
     }
 
-
+    @CrossOrigin(origins = "https://farmacia-react-two.vercel.app/")
     @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @PutMapping(value = "/atualizar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> atualizarFarmaceutico(@RequestBody @Validated FarmaceuticoRequest farmaceuticoRequest) throws Exception {
@@ -59,8 +59,6 @@ public class FarmaceuticoController {
         return responseEntity;
 
     }
-
-
 
     @ApiOperation(value = "inverter status de farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/inverter-status-farmaceutico/{id}")

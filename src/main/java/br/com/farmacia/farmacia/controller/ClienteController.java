@@ -39,6 +39,7 @@ public class ClienteController {
     }
 
 
+
     @ApiOperation(value = "Adicione clientes a base de dados", response = ClienteResponse.class)
     @PostMapping(value = "/adicionar-cliente")
     public ResponseEntity adicionarClientes(@RequestBody @Validated ClienteRequest clienteRequest) throws Exception {
@@ -49,7 +50,7 @@ public class ClienteController {
         return responseEntity;
     }
 
-
+    @CrossOrigin(origins = "https://farmacia-react-two.vercel.app/")
     @ApiOperation(value = "Atualize clientes na base de dados", response = ClienteResponse.class)
     @PutMapping(value = "/atualizar-cliente")
     public ResponseEntity<ClienteResponse> updateCliente(@RequestBody @Validated ClienteRequest clienteRequest) throws Exception {

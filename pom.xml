@@ -10,7 +10,7 @@
     </parent>
     <groupId>br.com.farmacia</groupId>
     <artifactId>Farmacias</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>farmacia</name>
     <description>Comunicação com APIs de farmácias</description>
     <properties>

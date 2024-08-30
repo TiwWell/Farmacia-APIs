@@ -43,7 +43,7 @@ public class RemedioController {
         Utils.logJsonEntradaSaida(responseEntity.getBody(), POST, RemedioController.class.getName(), "adicionar-remedio", "saida");
         return responseEntity;
     }
-
+    @CrossOrigin(origins = "https://farmacia-react-two.vercel.app/")
     @ApiOperation(value = "Atualize remedios na base de dados", response = RemedioResponse.class)
     @PutMapping(value = "/atualizar-remedio")
     public ResponseEntity<RemedioResponse> atualizarRemedio(@ApiParam(value = "Conjunto de dados para atualizar remedio no banco de dados") @RequestBody @Validated RemedioRequest remedioRequest) throws Exception {
