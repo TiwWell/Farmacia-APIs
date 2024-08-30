@@ -27,7 +27,7 @@ public class FarmaceuticoController {
     private static final String PUT = "PUT";
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "Liste farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/listar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> listaFarmaceuticos() throws Exception {
@@ -38,7 +38,7 @@ public class FarmaceuticoController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "Adicione farmaceuticos a base de dados", response = FarmaceuticoResponse.class)
     @PostMapping(value = "/adicionar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> adicionarFarmaceutico(@RequestBody @Validated AdicionarFarmaceuticoRequest adicionarFarmaceuticoRequest) throws Exception {
@@ -49,7 +49,7 @@ public class FarmaceuticoController {
         return responseEntity;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "Atualize farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @PutMapping(value = "/atualizar-farmaceutico")
     public ResponseEntity<FarmaceuticoResponse> atualizarFarmaceutico(@RequestBody @Validated FarmaceuticoRequest farmaceuticoRequest) throws Exception {
@@ -61,7 +61,7 @@ public class FarmaceuticoController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "inverter status de farmaceuticos na base de dados", response = FarmaceuticoResponse.class)
     @GetMapping(value = "/inverter-status-farmaceutico/{id}")
     public ResponseEntity<FarmaceuticoResponse> inverterStatusFarmaceutico(@PathVariable int id) throws Exception {

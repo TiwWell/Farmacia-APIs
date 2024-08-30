@@ -26,7 +26,7 @@ public class ClienteController {
     private static final String PUT = "PUT";
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "Liste clientes na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/lista-cliente")
     public ResponseEntity<ClienteResponse> listaClientes() throws Exception {
@@ -38,7 +38,7 @@ public class ClienteController {
 
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "Adicione clientes a base de dados", response = ClienteResponse.class)
     @PostMapping(value = "/adicionar-cliente")
     public ResponseEntity adicionarClientes(@RequestBody @Validated ClienteRequest clienteRequest) throws Exception {
@@ -49,7 +49,7 @@ public class ClienteController {
         return responseEntity;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "Atualize clientes na base de dados", response = ClienteResponse.class)
     @PutMapping(value = "/atualizar-cliente")
     public ResponseEntity<ClienteResponse> updateCliente(@RequestBody @Validated ClienteRequest clienteRequest) throws Exception {
@@ -60,7 +60,7 @@ public class ClienteController {
 
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @ApiOperation(value = "inverter status de clientes na base de dados", response = ClienteResponse.class)
     @GetMapping(value = "/inverter-status-clientes/{id}")
     public ResponseEntity<ClienteResponse> inverterStatusCliente(@PathVariable int id) throws Exception {
