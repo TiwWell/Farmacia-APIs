@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api")
 @Api(description = "Endpoints para listar, adicionar, atualizar e desativar clientes de uma farmácia", tags = {"Clientes"})
+@CrossOrigin(origins = "http://localhost:3000")
+
 
 public class ClienteController {
 
 
     @Autowired
+
     private ClienteService service;
     private static final String GET = "GET";
     private static final String POST = "POST";
