@@ -3,7 +3,6 @@ package br.com.farmacia.farmacia.service;
 import br.com.farmacia.farmacia.entity.FarmaceuticoEntity;
 import br.com.farmacia.farmacia.exception.DefaultErrorException;
 import br.com.farmacia.farmacia.models.requests.AdicionarFarmaceuticoRequest;
-import br.com.farmacia.farmacia.models.requests.ClienteRequest;
 import br.com.farmacia.farmacia.models.requests.FarmaceuticoRequest;
 import br.com.farmacia.farmacia.models.responses.FarmaceuticoResponse;
 import br.com.farmacia.farmacia.repository.FarmaceuticoRepository;

@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "clientes", schema = "public")
+@Table(name = "usuarios", schema = "public")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 
 
-public class ClientesEntity {
+public class UsuariosEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,13 +36,20 @@ public class ClientesEntity {
     @Column(name = "status")
     private int status;
 
-    public ClientesEntity(String nome, String cpfCnpj, String telefone, String endereco, int status) {
+    @Column(name = "senha")
+    private String senha;
 
+    @Column(name = "cargo")
+    private String cargo;
+
+    public UsuariosEntity(String nome, String cpfCnpj, String telefone, String endereco, int status) {
         this.nome = nome;
         this.cpf_cnpj = cpfCnpj;
         this.telefone = telefone;
         this.endereco = endereco;
         this.status = status;
+        this.senha = senha;
+        this.cargo = cargo;
     }
 
 }

@@ -9,10 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Cliente {
-    String Nome;
-    String Endereco;
-    String RG;
-    String Telefone;
+public class UsuariosDTO {
+    String nome;
+    String endereco;
+    String cpfCnpj;
+    String telefone;
+    String senha;
+    String cargo;
+
 
 }
