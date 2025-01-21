@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "UsuarioResponse", description = "Objeto de retorno do end-point: listar-usuario")
-public class UsuarioResponse {
+public class UsuariosResponse {
 
     @ApiModelProperty(name = "codRetorno", notes = "Código do retorno do http", example = "200", position = 1)
     private int codRetorno;

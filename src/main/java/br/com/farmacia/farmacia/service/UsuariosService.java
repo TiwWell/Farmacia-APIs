@@ -1,9 +1,9 @@
 package br.com.farmacia.farmacia.service;
 
-import br.com.farmacia.farmacia.entity.UsuariosEntity;
+import br.com.farmacia.farmacia.entity.UsuarioEntity;
 import br.com.farmacia.farmacia.exception.DefaultErrorException;
 import br.com.farmacia.farmacia.models.requests.UsuariosRequest;
-import br.com.farmacia.farmacia.models.responses.UsuarioResponse;
+import br.com.farmacia.farmacia.models.responses.UsuariosResponse;
 import br.com.farmacia.farmacia.repository.UsuariosRepository;
 import br.com.farmacia.farmacia.utils.Utils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -15,31 +15,31 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
-public class UsuarioService {
+public class UsuariosService {
     @Autowired
     private UsuariosRepository repository;
 
-    public UsuarioResponse listarUsuarios() {
-        UsuarioResponse response = new UsuarioResponse();
+    public UsuariosResponse listarUsuarios() {
+        UsuariosResponse response = new UsuariosResponse();
         response.setListaUsuarios(new ArrayList<>());
-        List<UsuariosEntity> listaUsuariosEntity;
+        List<UsuarioEntity> listaUsuarioEntity;
         try {
-            listaUsuariosEntity = repository.findAll();
+            listaUsuarioEntity = repository.findAll();
         } catch (Exception ex) {
             Throwable rootCause = ExceptionUtils.getRootCause(ex);
             String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
             throw new DefaultErrorException("Erro ao executar a listagem de usuarios no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
-        if (listaUsuariosEntity.size() > 0) {
-            for (UsuariosEntity usuariosEntity : listaUsuariosEntity) {
-                UsuariosRequest usuario = new UsuariosRequest();
-                usuario.setId(usuariosEntity.getId());
-                usuario.setNome(usuariosEntity.getNome());
-                usuario.setCpf_cnpj(usuariosEntity.getCpf_cnpj());
-                usuario.setTelefone(usuariosEntity.getTelefone());
-                usuario.setEndereco(usuariosEntity.getEndereco());
-                usuario.setStatus(usuariosEntity.getStatus());
-                response.getListaUsuarios().add(usuario);
+        if (listaUsuarioEntity.size() > 0) {
+            for (UsuarioEntity usuarioEntity : listaUsuarioEntity) {
+                UsuariosRequest usuarios = new UsuariosRequest();
+                usuarios.setId(usuarioEntity.getId());
+                usuarios.setNome(usuarioEntity.getNome());
+                usuarios.setCpf_cnpj(usuarioEntity.getCpf_cnpj());
+                usuarios.setTelefone(usuarioEntity.getTelefone());
+                usuarios.setEndereco(usuarioEntity.getEndereco());
+                usuarios.setStatus(usuarioEntity.getStatus());
+                response.getListaUsuarios().add(usuarios);
             }
             Collections.sort(response.getListaUsuarios(), Comparator.comparing(UsuariosRequest::getNome));
         } else {
@@ -49,7 +49,7 @@ public class UsuarioService {
         return response;
     }
 
-    public UsuarioResponse adicionarUsuarios(UsuariosRequest usuariosRequest) {
+    public UsuariosResponse adicionarUsuarios(UsuariosRequest usuariosRequest) {
         validarCpfCnpj(usuariosRequest);
 
         usuariosRequest.setTelefone(usuariosRequest.getTelefone().replaceAll("[^\\d]", ""));
@@ -57,25 +57,25 @@ public class UsuarioService {
             throw new DefaultErrorException("Formatação do telefone incorreta, exemplo de telefone (11) 965223522", HttpStatus.BAD_REQUEST, "");
         }
             try {
-            repository.save(new UsuariosEntity(usuariosRequest.getId(), usuariosRequest.getNome(), usuariosRequest.getCpf_cnpj(), usuariosRequest.getTelefone(), usuariosRequest.getEndereco(), usuariosRequest.getStatus(), usuariosRequest.getSenha(), usuariosRequest.getCargo()));
+            repository.save(new UsuarioEntity(usuariosRequest.getId(), usuariosRequest.getNome(), usuariosRequest.getCpf_cnpj(), usuariosRequest.getTelefone(), usuariosRequest.getEndereco(), usuariosRequest.getStatus(), usuariosRequest.getSenha(), usuariosRequest.getCargo()));
         } catch (Exception ex) {
             Throwable rootCause = ExceptionUtils.getRootCause(ex);
             String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
             throw new DefaultErrorException("Erro ao adicionar usuário no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
 
         }
-        UsuarioResponse usuarioResponse = new UsuarioResponse();
-        usuarioResponse.setListaUsuarios(new ArrayList<>());
-        usuarioResponse.getListaUsuarios().add(usuariosRequest);
+        UsuariosResponse usuariosResponse = new UsuariosResponse();
+        usuariosResponse.setListaUsuarios(new ArrayList<>());
+        usuariosResponse.getListaUsuarios().add(usuariosRequest);
 
-        usuarioResponse.setMensagem("Usuário criado com sucesso");
-        usuarioResponse.setCodRetorno(201);
-        return usuarioResponse;
+        usuariosResponse.setMensagem("Usuário criado com sucesso");
+        usuariosResponse.setCodRetorno(201);
+        return usuariosResponse;
 
     }
 
 
-    public UsuarioResponse atualizarUsuario(UsuariosRequest usuariosRequest) {
+    public UsuariosResponse atualizarUsuarios(UsuariosRequest usuariosRequest) {
         validarCpfCnpj(usuariosRequest);
 
         usuariosRequest.setTelefone(usuariosRequest.getTelefone().replaceAll("[^\\d]", ""));
@@ -83,34 +83,34 @@ public class UsuarioService {
             throw new DefaultErrorException("Formatação do telefone incorreta, exemplo de telefone (11) 965223522", HttpStatus.BAD_REQUEST, "");
         }
         try {
-            Optional<UsuariosEntity> usuariosEntity = repository.findById((long) usuariosRequest.getId());
+            Optional<UsuarioEntity> usuariosEntity = repository.findById((long) usuariosRequest.getId());
 
             if (!usuariosEntity.isPresent()) {
                 throw new DefaultErrorException("o usuário de ID: {" + usuariosRequest.getId() + "} não existe na base de dados", HttpStatus.BAD_REQUEST, "");
             }
-            repository.save(new UsuariosEntity(usuariosRequest.getId(), usuariosRequest.getNome(), usuariosRequest.getCpf_cnpj(), usuariosRequest.getTelefone(), usuariosRequest.getEndereco(), usuariosRequest.getStatus(), usuariosRequest.getSenha(), usuariosRequest.getCargo()));
+            repository.save(new UsuarioEntity(usuariosRequest.getId(), usuariosRequest.getNome(), usuariosRequest.getCpf_cnpj(), usuariosRequest.getTelefone(), usuariosRequest.getEndereco(), usuariosRequest.getStatus(), usuariosRequest.getSenha(), usuariosRequest.getCargo()));
         } catch (Exception ex) {
             Throwable rootCause = ExceptionUtils.getRootCause(ex);
             String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
             throw new DefaultErrorException("Erro ao atualizar usuário no banco de dados", HttpStatus.INTERNAL_SERVER_ERROR, rootCauseMessage.replaceAll("\n", " |"));
         }
-        UsuarioResponse usuarioResponse = new UsuarioResponse();
-        usuarioResponse.setListaUsuarios(new ArrayList<>());
+        UsuariosResponse usuariosResponse = new UsuariosResponse();
+        usuariosResponse.setListaUsuarios(new ArrayList<>());
 
-        usuarioResponse.setCodRetorno(201);
-        usuarioResponse.setMensagem("Usuário atualizado com sucesso");
-        usuarioResponse.getListaUsuarios().add(usuariosRequest);
+        usuariosResponse.setCodRetorno(201);
+        usuariosResponse.setMensagem("Usuário atualizado com sucesso");
+        usuariosResponse.getListaUsuarios().add(usuariosRequest);
 
-        return usuarioResponse;
+        return usuariosResponse;
 
     }
 
     @Transactional
-    public UsuarioResponse inverterStatusUsuario(int id) {
-        UsuarioResponse response = new UsuarioResponse();
+    public UsuariosResponse inverterStatusUsuario(int id) {
+        UsuariosResponse response = new UsuariosResponse();
         response.setListaUsuarios(new ArrayList<>());
         try {
-            Optional<UsuariosEntity> usuarioEntity = repository.findById((long) id);
+            Optional<UsuarioEntity> usuarioEntity = repository.findById((long) id);
             if (!usuarioEntity.isPresent()) {
                 throw new DefaultErrorException("o Usuário de ID: {" + id + "} não existe na base de dados", HttpStatus.BAD_REQUEST, "Informar um ID Válido");
             } else {

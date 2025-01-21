@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 
 
-public class UsuariosEntity {
+public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class UsuariosEntity {
     @Column(name = "cargo")
     private String cargo;
 
-    public UsuariosEntity(String nome, String cpfCnpj, String telefone, String endereco, int status) {
+    public UsuarioEntity(String nome, String cpfCnpj, String telefone, String endereco, int status) {
         this.nome = nome;
         this.cpf_cnpj = cpfCnpj;
         this.telefone = telefone;
