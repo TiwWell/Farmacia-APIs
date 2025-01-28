@@ -21,6 +21,8 @@ spring:
     properties:
       hibernate:
         default_schema: public
+
+#
   sql:
     init:
       mode: always
