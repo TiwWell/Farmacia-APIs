@@ -21,6 +21,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    //Este metodo faz um login.
     @ApiOperation(value = "Realizar login no sistema", response = Boolean.class)
     @PostMapping("/login")
     public ResponseEntity<?> login(@ApiParam @RequestBody @Validated LoginRequest body) {
