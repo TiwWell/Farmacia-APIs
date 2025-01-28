@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping(value = "/api")
@@ -71,6 +73,7 @@ public class FarmaceuticoController {
         Utils.logJsonEntradaSaida(responseEntity.getBody(), GET, FarmaceuticoController.class.getName(), "inverter-status-farmaceutico",  "saida");
                 return responseEntity;
     }
+
 
 
 }

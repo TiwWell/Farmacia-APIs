@@ -3,10 +3,12 @@ package br.com.farmacia.farmacia;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
+@ComponentScan(basePackages = "br.com.farmacia.farmacia")
 public class FarmaciaApplication {
 
     public static void main(String[] args) {
