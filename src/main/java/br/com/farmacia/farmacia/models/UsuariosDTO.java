@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class UsuariosDTO {
-    String nome;
+    String usuario;
     String endereco;
     String cpfCnpj;
     String telefone;

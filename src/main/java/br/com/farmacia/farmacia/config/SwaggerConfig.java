@@ -30,11 +30,13 @@ public class SwaggerConfig {
     public Docket api(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("br.com.farmacia.farmacia"))
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
+                .pathMapping("/")
                 .useDefaultResponseMessages(false)
                 .apiInfo(metaData());
+
     }
 
     private ApiInfo metaData(){
@@ -46,5 +48,6 @@ public class SwaggerConfig {
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .build();
     }
+
 
 }

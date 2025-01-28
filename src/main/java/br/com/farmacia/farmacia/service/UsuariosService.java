@@ -34,14 +34,15 @@ public class UsuariosService {
             for (UsuarioEntity usuarioEntity : listaUsuarioEntity) {
                 UsuariosRequest usuarios = new UsuariosRequest();
                 usuarios.setId(usuarioEntity.getId());
-                usuarios.setNome(usuarioEntity.getNome());
+                usuarios.setUsuario(usuarioEntity.getUsuario());
                 usuarios.setCpf_cnpj(usuarioEntity.getCpf_cnpj());
                 usuarios.setTelefone(usuarioEntity.getTelefone());
                 usuarios.setEndereco(usuarioEntity.getEndereco());
                 usuarios.setStatus(usuarioEntity.getStatus());
+                usuarios.setSenha(usuarioEntity.getSenha());
                 response.getListaUsuarios().add(usuarios);
             }
-            Collections.sort(response.getListaUsuarios(), Comparator.comparing(UsuariosRequest::getNome));
+            Collections.sort(response.getListaUsuarios(), Comparator.comparing(UsuariosRequest::getUsuario));
         } else {
             throw new DefaultErrorException("Não existem dados para essa consulta", HttpStatus.OK, "Falta de itens na tabela");
         }
@@ -57,7 +58,7 @@ public class UsuariosService {
             throw new DefaultErrorException("Formatação do telefone incorreta, exemplo de telefone (11) 965223522", HttpStatus.BAD_REQUEST, "");
         }
             try {
-            repository.save(new UsuarioEntity(usuariosRequest.getId(), usuariosRequest.getNome(), usuariosRequest.getCpf_cnpj(), usuariosRequest.getTelefone(), usuariosRequest.getEndereco(), usuariosRequest.getStatus(), usuariosRequest.getSenha(), usuariosRequest.getCargo()));
+            repository.save(new UsuarioEntity(usuariosRequest.getId(), usuariosRequest.getUsuario(), usuariosRequest.getCpf_cnpj(), usuariosRequest.getTelefone(), usuariosRequest.getEndereco(), usuariosRequest.getStatus(), usuariosRequest.getSenha(), usuariosRequest.getCargo()));
         } catch (Exception ex) {
             Throwable rootCause = ExceptionUtils.getRootCause(ex);
             String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
@@ -88,7 +89,7 @@ public class UsuariosService {
             if (!usuariosEntity.isPresent()) {
                 throw new DefaultErrorException("o usuário de ID: {" + usuariosRequest.getId() + "} não existe na base de dados", HttpStatus.BAD_REQUEST, "");
             }
-            repository.save(new UsuarioEntity(usuariosRequest.getId(), usuariosRequest.getNome(), usuariosRequest.getCpf_cnpj(), usuariosRequest.getTelefone(), usuariosRequest.getEndereco(), usuariosRequest.getStatus(), usuariosRequest.getSenha(), usuariosRequest.getCargo()));
+            repository.save(new UsuarioEntity(usuariosRequest.getId(), usuariosRequest.getUsuario(), usuariosRequest.getCpf_cnpj(), usuariosRequest.getTelefone(), usuariosRequest.getEndereco(), usuariosRequest.getStatus(), usuariosRequest.getSenha(), usuariosRequest.getCargo()));
         } catch (Exception ex) {
             Throwable rootCause = ExceptionUtils.getRootCause(ex);
             String rootCauseMessage = (rootCause != null) ? ExceptionUtils.getRootCause(ex).getMessage() : ex.getMessage();
@@ -121,7 +122,7 @@ public class UsuariosService {
                 } else {
                     response.getListaUsuarios().get(0).setStatus(0);
                 }
-                response.getListaUsuarios().get(0).setNome(usuarioEntity.get().getNome());
+                response.getListaUsuarios().get(0).setUsuario(usuarioEntity.get().getUsuario());
                 response.getListaUsuarios().get(0).setCpf_cnpj(usuarioEntity.get().getCpf_cnpj());
                 response.getListaUsuarios().get(0).setTelefone(usuarioEntity.get().getTelefone());
                 response.getListaUsuarios().get(0).setEndereco(usuarioEntity.get().getEndereco());
@@ -136,7 +137,7 @@ public class UsuariosService {
         return response;
     }
 
-    private static void validarCpfCnpj(UsuariosRequest usuariosRequest) {
+    private static void validarCpfCnpj(@org.jetbrains.annotations.NotNull UsuariosRequest usuariosRequest) {
         usuariosRequest.setCpf_cnpj(usuariosRequest.getCpf_cnpj().replaceAll("[^\\d]", ""));
         if (usuariosRequest.getCpf_cnpj().length() == 11) {
             if(!Utils.isValidCPF(usuariosRequest.getCpf_cnpj())){

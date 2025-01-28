@@ -20,8 +20,8 @@ public class UsuariosRequest {
     long id;
 
     @NotBlank (message = "Favor inserir um nome")
-    @ApiModelProperty(name = "nome", notes = "Nome do usuário", example = "Maria Aparecida da Silva",required = true, position = 1)
-    String nome;
+    @ApiModelProperty(name = "usuario", notes = "Nome do usuário", example = "Maria Aparecida da Silva",required = true, position = 1)
+    String usuario;
 
     @NotBlank (message = "Favor inserir um CPF ou CNPJ") //Pronto Well, alteramos.
     @ApiModelProperty(name = "cpf_cnpj", notes = "CPF/CNPJ do usuário com pontuação", example = "123.401.660-55",required = true, position = 2)

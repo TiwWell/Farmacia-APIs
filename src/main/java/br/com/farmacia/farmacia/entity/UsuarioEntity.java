@@ -21,8 +21,8 @@ public class UsuarioEntity {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "nome")
-    private String nome;
+    @Column(name = "usuario")
+    private String usuario;
 
     @Column(name = "cpf_cnpj")
     private String cpf_cnpj;
@@ -43,7 +43,7 @@ public class UsuarioEntity {
     private String cargo;
 
     public UsuarioEntity(String nome, String cpfCnpj, String telefone, String endereco, int status) {
-        this.nome = nome;
+        this.usuario = usuario;
         this.cpf_cnpj = cpfCnpj;
         this.telefone = telefone;
         this.endereco = endereco;
