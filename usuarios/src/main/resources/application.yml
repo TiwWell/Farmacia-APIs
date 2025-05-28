@@ -1,0 +1,37 @@
+info:
+  app:
+    name: Usuarios
+    description: API que permite controlar informações da base de dados de usuarios para uma farmácia
+    version: 1.0.0
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    url: jdbc:postgresql://localhost:5435/postgres
+    username: postgres
+    password: 123456
+  jpa:
+    hibernate:
+      type: trace
+      ddl-auto: none
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        default_schema: public
+
+#
+  sql:
+    init:
+      mode: always
+  config:
+        import: optional:file:variables.env[.properties]
+
+server:
+  port: 5000
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type: TRACE
